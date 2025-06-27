@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VU3JNM - Jagadeesh N Malakannavar | Ham Radio Operator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .radio-wave {
+            position: relative;
+            height: 100px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%233b82f6" opacity=".25"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" fill="%233b82f6" opacity=".5"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%233b82f6"/></svg>');
+            background-repeat: repeat-x;
+            background-size: 50% 100px;
+            animation: wave 15s linear infinite;
+        }
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .qsl-card {
+            perspective: 1000px;
+        }
+        .qsl-card-inner {
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .qsl-card:hover .qsl-card-inner {
+            transform: rotateY(180deg);
+        }
+        .qsl-card-front, .qsl-card-back {
+            backface-visibility: hidden;
+        }
+        .qsl-card-back {
+            transform: rotateY(180deg);
+        }
+
+        .frequency-display {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+
+        .radio-animation {
+            animation: radioPulse 2s infinite;
+        }
+        @keyframes radioPulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Radio Wave Header -->
+    <div class="radio-wave bg-blue-600">
+        <div class="wave"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-broadcast-tower text-blue-600 text-2xl"></i>
+                    <span class="font-bold text-xl">VU3JNM</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-blue-600 font-medium hover:text-blue-800">Home</a>
+                    <a href="#about" class="text-gray-600 hover:text-blue-600">About</a>
+                    <a href="#equipment" class="text-gray-600 hover:text-blue-600">Equipment</a>
+                    <a href="#qsl" class="text-gray-600 hover:text-blue-600">QSL</a>
+                    <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
+                </div>
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="py-16 bg-gradient-to-b from-blue-50 to-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                        <span class="text-blue-600">Jagadeesh N Malakannavar</span>
+                    </h1>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-700 mb-6">
+                        Amateur Radio Operator <span class="text-blue-600">VU3JNM</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Connecting the world through radio waves from India.
+                        Passionate about amateur radio, DXing, and emergency communications.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+                            Contact Me
+                        </a>
+                        <a href="#qsl" class="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition duration-300">
+                            QSL Info
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="w-64 h-64 md:w-80 md:h-80 bg-blue-100 rounded-full flex items-center justify-center shadow-xl">
+                            <i class="fas fa-broadcast-tower text-blue-600 text-8xl radio-animation"></i>
+                        </div>
+                        <div class="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg">
+                            <div class="frequency-display">
+                                14.190 MHz
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Current Frequency</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                <span class="border-b-4 border-blue-600 pb-2">About VU3JNM</span>
+            </h2>
+
+            <div class="flex flex-col md:flex-row items-center mb-12">
+                <div class="md:w-1/3 mb-8 md:mb-0 flex justify-center">
+                    <div class="bg-blue-100 p-6 rounded-lg shadow-md w-64">
+                        <div class="text-center">
+                            <i class="fas fa-id-card text-blue-600 text-5xl mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800">Callsign</h3>
+                            <p class="text-2xl font-bold text-blue-600">VU3JNM</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-2/3 md:pl-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">My Ham Radio Journey</h3>
+                    <p class="text-gray-600 mb-4">
+                        Hello fellow hams! I'm Jagadeesh N Malakannavar, an amateur radio operator from India with the callsign VU3JNM.
+                        I got licensed in 2015 and have been actively participating in various amateur radio activities since then.
+                    </p>
+                    <p class="text-gray-600 mb-4">
+                        My primary interests include HF communications, antenna design, and participating in contests.
+                        I'm also passionate about promoting amateur radio among youth and supporting emergency communication networks.
+                    </p>
+                    <p class="text-gray-600">
+                        When I'm not on the air, you can find me tinkering with electronics, building antennas,
+                        or helping newcomers get started in this wonderful hobby.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">DXing</h3>
+                    <p class="text-gray-600">
+                        Actively working DX stations from around the world. Always looking for new countries to add to my log.
+                    </p>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Homebrew</h3>
+                    <p class="text-gray-600">
+                        Enjoy building my own equipment and antennas. Currently working on a multi-band HF vertical.
+                    </p>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-first-aid"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Emergency Comms</h3>
+                    <p class="text-gray-600">
+                        Trained in emergency communications. Ready to serve when needed.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Section -->
+    <section id="equipment" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                <span class="border-b-4 border-blue-600 pb-2">My Station</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Transceivers</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-radio text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">ICOM IC-775 DSP</h4>
+                                <p class="text-gray-600 text-sm">HF All Mode Transceiver</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-radio text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Kenwood TS 850s</h4>
+                                <p class="text-gray-600 text-sm">HF Transceiver</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-radio text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">ICOM IC 2300H</h4>
+                                <p class="text-gray-600 text-sm">VHF Transceiver</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-radio text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Kenwood TM-D710A</h4>
+                                <p class="text-gray-600 text-sm">VHF Transceiver [MO Setup]</p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Antennas</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-antenna text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Hexbeam</h4>
+                                <p class="text-gray-600 text-sm">5-band (20/17/15/12/10m) directional antenna @ 12m height</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-antenna text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">End Fed Half Wave Antenna
+                                </h4>
+                                <p class="text-gray-600 text-sm">80m, 40m, 20, 15m,10m multibands EFHW @ 10m height</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-antenna text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Dipole</h4>
+                                <p class="text-gray-600 text-sm">40m half-wave dipole @ 10m height</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-antenna text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">J-Pole</h4>
+                                <p class="text-gray-600 text-sm">Dual band (2m/70cm) vertical antenna</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Accessories</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-plug text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Power Supply</h4>
+                                <p class="text-gray-600 text-sm">30A Switching Power Supply</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-bolt text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Tuner</h4>
+                                <p class="text-gray-600 text-sm">LDG IT-100 Automatic Antenna Tuner</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-headphones text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Headset</h4>
+                                <p class="text-gray-600 text-sm">Heil Pro Set Elite with Boom Microphone</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Software</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-laptop-code text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Logging</h4>
+                                <p class="text-gray-600 text-sm">Log4OM 2 - Advanced logging and DX cluster</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-satellite text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Digital Modes</h4>
+                                <p class="text-gray-600 text-sm"> FT8 </p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marked-alt text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Mapping</h4>
+                                <p class="text-gray-600 text-sm">GridTracker for visualizing FT8 contacts</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QSL Section -->
+    <section id="qsl" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                <span class="border-b-4 border-blue-600 pb-2">QSL Information</span>
+            </h2>
+
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 flex justify-center">
+                    <div class="qsl-card w-64 h-96">
+                        <div class="qsl-card-inner w-full h-full">
+                            <div class="qsl-card-front absolute w-full h-full bg-white border-2 border-blue-600 rounded-lg p-4 shadow-lg flex flex-col">
+                                <div class="text-center mb-4">
+                                    <div class="text-xs text-gray-500">Amateur Radio</div>
+                                    <div class="text-2xl font-bold text-blue-600">QSL CARD</div>
+                                </div>
+                                <div class="flex-grow bg-blue-50 rounded p-4 mb-4 flex flex-col items-center justify-center">
+                                    <div class="text-3xl font-bold text-blue-600 mb-2">VU3JNM</div>
+                                    <div class="text-lg text-gray-700">Jagadeesh N Malakannavar</div>
+                                </div>
+                                <div class="text-center text-sm">
+                                    <div class="text-gray-700">QTH: Karnataka, India</div>
+                                    <div class="text-gray-700">Grid: MK82sx</div>
+                                </div>
+                            </div>
+                            <div class="qsl-card-back absolute w-full h-full bg-blue-600 text-white rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
+                                <div class="text-center mb-4">
+                                    <div class="text-xl font-bold mb-2">QSL Via</div>
+                                    <div class="text-lg mb-1">Direct</div>
+                                    <div class="text-lg mb-1">Bureau</div>
+                                    <div class="text-lg mb-1">eQSL</div>
+                                    <div class="text-lg">LoTW</div>
+                                </div>
+                                <div class="text-center text-sm mt-4">
+                                    <div>Confirmed on LoTW</div>
+                                    <div>eQSL Accepted</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 md:pl-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">How to QSL with VU3JNM</h3>
+                    <p class="text-gray-600 mb-6">
+                        I confirm all QSOs and would be happy to exchange QSL cards. Here are the different ways you can get a confirmation from me:
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Direct Mail</h4>
+                                <p class="text-gray-600">
+                                    Send your QSL card with sufficient return postage or IRC to my address.
+                                    I will reply with my QSL card.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-globe text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">LoTW</h4>
+                                <p class="text-gray-600">
+                                    I actively use Logbook of The World. Upload your logs to LoTW for quick electronic confirmation.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-at text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">eQSL</h4>
+                                <p class="text-gray-600">
+                                    I accept eQSL confirmations. My eQSL.cc account is active and I confirm all valid QSOs.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-exchange-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Bureau</h4>
+                                <p class="text-gray-600">
+                                    I participate in the incoming and outgoing QSL bureaus.
+                                    Cards are processed through the Indian QSL bureau.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                <span class="border-b-4 border-blue-600 pb-2">Contact VU3JNM</span>
+            </h2>
+
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Email</h4>
+                                <p class="text-gray-600">vu3jnm@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-map-marker-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">QTH</h4>
+                                <p class="text-gray-600">Karnataka, India</p>
+                                <p class="text-gray-600">Grid Square: MK82sx</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-phone-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">Phone</h4>
+                                <p class="text-gray-600">Available upon request for licensed hams</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-calendar-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">On Air Schedule</h4>
+                                <p class="text-gray-600">Most evenings local time (UTC+5:30)</p>
+                                <p class="text-gray-600">Weekends: More active on HF bands</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10">
+                        <h4 class="font-bold text-gray-800 mb-4">Follow Me</h4>
+                        <div class="flex space-x-4">
+                            <a href="#@mnjagadeesh" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#@mnjagadeesh" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#@mnjagadeesh" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#@vu3jnm" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 md:pl-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Send a Message</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-1">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-1">Your Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="callsign" class="block text-gray-700 font-medium mb-1">Your Callsign (if applicable)</label>
+                            <input type="text" id="callsign" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-gray-700 font-medium mb-1">Subject</label>
+                            <select id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                <option>General Inquiry</option>
+                                <option>QSL Request</option>
+                                <option>Technical Question</option>
+                                <option>DX Contact</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-gray-700 font-medium mb-1">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"></textarea>
+                        </div>
+
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300 w-full">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-broadcast-tower text-blue-400 text-2xl mr-3"></i>
+                        <span class="text-xl font-bold">VU3JNM</span>
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        Jagadeesh N Malakannavar - Licensed amateur radio operator from India.
+                        Promoting the hobby and serving the community through radio communications.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-gray-400 hover:text-blue-400 transition duration-300">Home</a></li>
+                            <li><a href="#about" class="text-gray-400 hover:text-blue-400 transition duration-300">About</a></li>
+                            <li><a href="#equipment" class="text-gray-400 hover:text-blue-400 transition duration-300">Equipment</a></li>
+                            <li><a href="#qsl" class="text-gray-400 hover:text-blue-400 transition duration-300">QSL Info</a></li>
+                            <li><a href="#contact" class="text-gray-400 hover:text-blue-400 transition duration-300">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Resources</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">License Info</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Band Plan</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Repeaters</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">DX Clusters</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Contest Calendar</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Legal</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Privacy Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Terms of Use</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">
+                    &copy; 2023 VU3JNM - Jagadeesh N Malakannavar. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition duration-300">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+     // Simple JavaScript for demonstration
+     document.addEventListener('DOMContentLoaded', function() {
+         // Update current frequency display with random HF frequency
+         const bands = [
+             { freq: '3.795 MHz', mode: '80m LSB' },
+             { freq: '7.095 MHz', mode: '40m LSB' },
+             { freq: '14.195 MHz', mode: '20m USB' },
+             { freq: '18.118 MHz', mode: '17m USB' },
+             { freq: '21.295 MHz', mode: '15m USB' },
+             { freq: '24.945 MHz', mode: '12m USB' },
+             { freq: '28.495 MHz', mode: '10m USB' },
+             { freq: '50.125 MHz', mode: '6m FM' },
+             { freq: '145.500 MHz', mode: '2m FM' },
+             { freq: '433.500 MHz', mode: '70cm FM' }
+         ];
+
+         const frequencyDisplay = document.querySelector('.frequency-display');
+         const randomBand = bands[Math.floor(Math.random() * bands.length)];
+
+         frequencyDisplay.textContent = randomBand.freq;
+         frequencyDisplay.nextElementSibling.textContent = `Current Frequency (${randomBand.mode})`;
+
+         // Mobile menu toggle (would need more implementation)
+         const mobileMenuButton = document.querySelector('button.md\\:hidden');
+         mobileMenuButton.addEventListener('click', function() {
+             alert('Mobile menu would open here in a complete implementation.');
+         });
+
+         // Smooth scrolling for anchor links
+         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+             anchor.addEventListener('click', function(e) {
+                 e.preventDefault();
+                 document.querySelector(this.getAttribute('href')).scrollIntoView({
+                     behavior: 'smooth'
+                 });
+             });
+         });
+     });
+    </script>
+</body>
+</html>
