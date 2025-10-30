@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Live CallSign Search Utility</title>
+        <style>
+         body {
+             font-family: Arial, sans-serif;
+             margin: 20px;
+         }
+         #searchBox {
+             margin: 10px 5px 20px 0;
+             padding: 5px;
+             width: 220px;
+         }
+         table {
+             border-collapse: collapse;
+             width: 60%;
+         }
+         th, td {
+             border: 1px solid #ccc;
+             padding: 10px;
+             text-align: center;
+         }
+         .highlight {
+             background-color: yellow;
+             color: black;
+             font-weight: bold;
+         }
+         th {
+             text-align: left;
+             background-color: Green;
+         }
+        </style>
+    </head>
+    <body>
+        <input type="text" id="searchBox" placeholder="Search as you type..." />
+        <button onclick="clearSearch()">Clear</button>
+
+        <div id="content">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>CallSign</th>
+                        <th>Name</th>
+                        <th>QTH</th>
+                        <th>Other Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>VU3JNM</td><td>Jagadeesh Malakannavar</td><td>Belgaum</td><td></td></tr>
+                    <tr><td>VU2BGG</td><td>Balu Hegde </td><td>1463 RAMATIRTHA NAGARA</td><td>Net Controller, HamBel</td></tr>
+                    <tr><td>VU2KOC</td><td>OMPRAKASH KHIYANI </td><td>Plot No13,Sindhi Colony,Hindalga Road Belgaum-591108.Karnataka, Cell no+91-7676720092 email koc7388@gmail.com</td><td>Net Controller, HamBel</td></tr>
+                    <tr><td>VU2BRJ</td><td>B.R. "Joshi" JOSHI</td><td>FLAT No. 3, FIRST FLOOR, HARSHAVARDHAN APARTMENT, NEAR SAPTAPUR BHAVI, DHARWAD, KA 580 001, vu2brj13@gmail.com</td><td>Net Controller, HamBel</td></tr>
+                    <tr><td>VU2PNU</td><td>PRAKASH UBRANI, CTS 4186 5th Cross Mahadwar Road, BELGAUM- 590001.KARANATAKA . mob no +919845911795 </td><td>1463 RAMATIRTHA NAGARA</td><td>Net Controller, HamBel</td></tr>
+                    <tr><td>VU2XFH</td><td>Mahantesh Kamakar </td><td>Dr No 2232, Maradi Galli, Bailhongal, Belagum,, Ka 591102</td><td>Net Controller, HamBel</td></tr>
+                    <tr><td>VU2INE</td><td>Praful Roogi </td><td>Belgaum, KA 590006,vu2ine@gmail.com </td><td>Net Controller, HamBel[in future]</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+         const searchBox = document.getElementById("searchBox");
+         const table = document.getElementById("dataTable");
+
+         searchBox.addEventListener("input", filterTable);
+
+         function filterTable() {
+             const searchTerm = searchBox.value.trim().toLowerCase();
+             const rows = table.querySelectorAll("tbody tr");
+
+             rows.forEach(row => {
+                 const text = row.innerText.toLowerCase();
+
+                 // Show or hide rows
+                 if (text.includes(searchTerm) || searchTerm === "") {
+                     row.style.display = "";
+                 } else {
+                     row.style.display = "none";
+                 }
+
+                 // Highlight matched text
+                 row.querySelectorAll("td").forEach(cell => {
+                     const cellText = cell.textContent;
+                     if (searchTerm && cellText.toLowerCase().includes(searchTerm)) {
+                         const regex = new RegExp(`(${searchTerm})`, 'gi');
+                         cell.innerHTML = cellText.replace(regex, '<span class="highlight">$1</span>');
+                     } else {
+                         cell.innerHTML = cellText; // reset text
+                     }
+                 });
+             });
+         }
+
+         function clearSearch() {
+             searchBox.value = "";
+             filterTable();
+         }
+        </script>
+    </body>
+</html>
