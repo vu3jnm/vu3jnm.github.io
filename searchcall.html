@@ -1122,38 +1122,71 @@ A65GR	Hari</td><td> (</td><td>VU2TG)</td><td></td></tr>
         </div>
 
         <script>
-         const searchBox = document.getElementById("searchBox");
-         const table = document.getElementById("dataTable");
+         /* const searchBox = document.getElementById("searchBox");
+          * const table = document.getElementById("dataTable");
 
-         searchBox.addEventListener("input", filterTable);
+          * searchBox.addEventListener("input", filterTable);
 
-         function filterTable() {
-             const searchTerm = searchBox.value.trim().toLowerCase();
-             const rows = table.querySelectorAll("tbody tr");
+          * function filterTable() {
+          *     const searchTerm = searchBox.value.trim().toLowerCase();
+          *     const rows = table.querySelectorAll("tbody tr");
 
-             rows.forEach(row => {
-                 const text = row.innerText.toLowerCase();
+          *     rows.forEach(row => {
+          *         const text = row.innerText.toLowerCase();
 
-                 // Show or hide rows
-                 if (text.includes(searchTerm) || searchTerm === "") {
-                     row.style.display = "";
-                 } else {
-                     row.style.display = "none";
-                 }
+          *         // Show or hide rows
+          *         if (text.includes(searchTerm) || searchTerm === "") {
+          *             row.style.display = "";
+          *         } else {
+          *             row.style.display = "none";
+          *         }
 
-                 // Highlight matched text
-                 row.querySelectorAll("td").forEach(cell => {
-                     const cellText = cell.textContent;
-                     if (searchTerm && cellText.toLowerCase().includes(searchTerm)) {
-                         const regex = new RegExp(`(${searchTerm})`, 'gi');
-                         cell.innerHTML = cellText.replace(regex, '<span class="highlight">$1</span>');
-                     } else {
-                         cell.innerHTML = cellText; // reset text
-                     }
-                 });
-             });
+          *         // Highlight matched text
+          *         row.querySelectorAll("td").forEach(cell => {
+          *             const cellText = cell.textContent;
+          *             if (searchTerm && cellText.toLowerCase().includes(searchTerm)) {
+          *                 const regex = new RegExp(`(${searchTerm})`, 'gi');
+          *                 cell.innerHTML = cellText.replace(regex, '<span class="highlight">$1</span>');
+          *             } else {
+          *                 cell.innerHTML = cellText; // reset text
+          *             }
+          *         });
+          *     });
+          * }
+          */
+
+const searchBox = document.getElementById("searchBox");
+    const table = document.getElementById("dataTable");
+    const noResults = document.getElementById("noResults");
+
+    searchBox.addEventListener("input", searchTable);
+
+    function searchTable() {
+      const filter = searchBox.value.trim().toLowerCase();
+      const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+      let visibleCount = 0;
+
+      for (let row of rows) {
+        const firstCell = row.cells[0];
+        const text = firstCell.textContent.toLowerCase();
+
+        // Clear old highlights
+        firstCell.innerHTML = firstCell.textContent;
+
+        if (filter && text.includes(filter)) {
+          const regex = new RegExp(`(${filter})`, "gi");
+          firstCell.innerHTML = firstCell.textContent.replace(regex, "<span class='highlight'>$1</span>");
+          row.style.display = "";
+          visibleCount++;
+        } else if (!filter) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      }
+
+      noResults.style.display = visibleCount === 0 && filter ? "block" : "none";
          }
-
          function clearSearch() {
              searchBox.value = "";
              filterTable();
