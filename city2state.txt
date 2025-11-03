@@ -1,0 +1,318 @@
+Chennai	Tamil Nadu
+Mluru	Karnataka
+Aduvassery	Unknown
+Kochi	Kerala
+Bluru	Karnataka
+Ahmbad	Gujarat
+Adur	Unknown
+Kottayam	Kerala
+Namakkal	Tamil Nadu
+Worli Mumbai	Maharashtra
+Pondicheri	Tamil Nadu
+Mumbai	Maharashtra
+Idukki	Kerala
+Kollem	Unknown
+Trissur	Tamil Nadu
+Betal Betim Goa	Goa
+Gandhi Ngr	Gujarat
+Calicut	Kerala
+Erode	Tamil Nadu
+Shimoga	Karnataka
+Pune	Maharashtra
+Trivandrum	Kerala
+Vadakara Calicut	Kerala
+Kannur	Kerala
+Hyderabad	Telangana
+Gurgaon	Haryana
+Eranakulam	Tamil Nadu
+Tirichirapalli	Tamil Nadu
+Kolhapur	Maharashtra
+Visakhapatnam	Andhra Pradesh
+
+Mlore	Karnataka
+Tirupur	Tamil Nadu
+Belgaum	Karnataka
+Tiruchirappalli	Tamil Nadu
+Edapal	Kerala
+Mysuru	Karnataka
+Kollam	Kerala
+Adoor	Unknown
+Nyveli	Unknown
+Sirsi	Karnataka
+Varkala	Unknown
+Hyderabad	Telangana
+Mavoor Calicut	Unknown
+Palakkad	Kerala
+Penanani	Unknown
+Madurai	Tamil Nadu
+Bokaro	Jharkhand
+Cherthala	Kerala
+Sec	Unknown
+Tenkasi	Tamil Nadu
+Chidambaram Tamil Nadu	Tamil Nadu
+Bluru	Karnataka
+Selvaraj	Unknown
+BNettur Tiruchirappalli	Tamil Nadu
+Irinjalakuda	Unknown
+Kalyan	Maharashtra
+Guruvayur	Kerala
+Eluru	Andhra Pradesh
+Blore	Karnataka
+Sangli	Maharashtra
+Dindakal Tamil Nadu	Tamil Nadu
+Neyakappi village Tamil Nadu	Tamil Nadu
+Kovilpatti	Tamil Nadu
+Vipin Island	Unknown
+Yamunanagar	Haryana
+Trichur	Tamil Nadu
+Bgm	Karnataka
+Coimbatore	Tamil Nadu
+Aluva	Unknown
+Greater Noida	Uttar Pradesh
+Mavalikara	Kerala
+Narikode	Unknown
+Thodupuza	Unknown
+Tenali	Andhra Pradesh
+Tirchur	Tamil Nadu
+Malappuram	Kerala
+Vaikom Kottayam	Kerala
+Karunagapally	Kerala
+Edapal	Kerala
+Udmalpet	Tamil Nadu
+Aurangabad	Maharashtra
+Ahamad Ngr	Maharashtra
+Shringeri	Karnataka
+Manipal	Karnataka
+Goa	Goa
+Rajapalayam	Tamil Nadu
+Krishnagiri	Tamil Nadu
+Alleppy	Kerala
+Ramanathpura	Unknown
+Warangal	Telangana
+Surat	Gujarat
+Udumalpet	Tamil Nadu
+Thodupuzha	Kerala
+Palacheri	Tamil Nadu
+Sec	Unknown
+Udamalpet	Tamil Nadu
+Yamanagar Har	Haryana
+Guntur	Andhra Pradesh
+Waynad	Kerala
+Wayanad	Kerala
+Navi Mumbaiai	Maharashtra
+Lonawala	Maharashtra
+New Delhi	Delhi
+Mysore	Karnataka
+Noida	Uttar Pradesh
+Chandapur	Unknown
+Rajkot	Gujarat
+Pavunjur	Unknown
+Udumalpet Tamil Nadu	Tamil Nadu
+Vaizak	Andhra Pradesh
+Patan Guj	Gujarat
+Vijaywada	Andhra Pradesh
+Sultan Bathery	Kerala
+Gudalur	Tamil Nadu
+NDelhi	Delhi
+Bhuvaneshwar	Odhisa
+Ambasamudram	Tamil Nadu
+Newasa	Maharashtra
+Egattur Tamil Nadu	Tamil Nadu
+Mandya	Karnataka
+Ratlam	Madhya Pradesh
+B luru	Karnataka
+Polachi	Unknown
+Kumbla Kasargod	Kerala
+Alwe	Unknown
+Cdurga	Karnataka
+Coimb	Tamil Nadu
+Kasargod	Kerala
+Ernakulam	Kerala
+Handinimgaon	Unknown
+Pollchi	Unknown
+Nagarcoil Tirupur	Tamil Nadu
+Anand	Gujarat
+Surat	Gujarat
+Nellore	Andhra Pradesh
+Rajyapalam	Tamil Nadu
+Andheri Mumbai	Maharashtra
+Near Rameswaram	Tamil Nadu
+Malkapur Buldhana	Unknown
+Kandivali Mumbai	Maharashtra
+Quilon	Kerala
+Allepy	Kerala
+Bhavnagar	Gujarat
+Turuvekere	Karnataka
+Mumbaiai	Maharashtra
+Gandhi Nagar	Gujarat
+Bgm	Karnataka
+Pollachi	Tamil Nadu
+Salem	Tamil Nadu
+Dindi	Tamil Nadu
+NRO Hyderabad	Telangana
+Vile Parle Mum	Maharashtra
+Idukki	Kerala
+Agra	Uttar Pradesh
+Manjeshwar	Karnataka
+Bhopal	Madhya Pradesh
+Nasik	Maharashtra
+ 	Unknown
+Kattappana	Kerala
+Kamshet	Unknown
+AP	AP
+Kotyam	Kerala
+Kochi	Kerala
+Navsari Guj	Gujarat
+Yeranakulam	Tamil Nadu
+Koilkod	Kerala
+Jamnagar	Gujarat
+Thrissur	Kerala
+Hubli	Karnataka
+Tuticorin	Tamil Nadu
+Nr Rameshwaram	Tamil Nadu
+Hoskote	Karnataka
+Gulbarga	Karnataka
+Badoda	Gujarat
+Panvel Mumbai	Maharashtra
+Tamil Nadu	Tamil Nadu
+Gannavaram Vwada	Unknown
+Kothamangalam	Unknown
+Penugonda	Rayalaseema
+Tiruchirapalli	Tamil Nadu
+CMagaluru	Karnataka
+Colaba Mumbai	Maharashtra
+Mumbai	Maharashtra
+Tiruchangod	Tamil Nadu
+Vadakara	Kerala
+Tiruchengode	Unknown
+Kolkatta	West Bengal
+Sambhaji Ngr	Maharashtra
+Erakudi	Tamil Nadu
+Mys	Karnataka
+Kochi	Kerala
+Vishakapatnam	Odhisa
+Paramakudi	Tamil Nadu
+Satara	Maharashtra
+Laxmeshwar	Karnataka
+Sulthan Bathery	Kerala
+Chidambaram	Tamil Nadu
+Alwaye	Kerala
+Trivandrum	Kerala
+Pathanamthitta	Kerala
+Valsad	Gujarat
+Koothattukulam	Kerala
+Tiruviza	Unknown
+Tirvandrum	Kerala
+Khammam	Telangana
+Mavelikara	Kerala
+Thuravoor	Unknown
+Panavel	Maharashtra
+Karur Tamil Nadu	Tamil Nadu
+Near Kochi	Kerala
+Gudalur Nilgiris	Tamil Nadu
+Thane	Maharashtra
+Kolkata	West Bengal
+Gadhinglaj	Maharashtra
+Yernakulam	Kerala
+Delhi	Delhi
+Sirsi Bluru	Karnataka
+Nr Kochi	Kerala
+Borivali Mumbai	Maharashtra
+Cuddalore	Tamil Nadu
+Weynad	Kerala
+Kodumon Nr Adur	Unknown
+Gwalior	Madhya Pradesh
+Kottayam	Kerala
+Aluva	Unknown
+Vengurla	Andhra Pradesh
+Kankavli	Unknown
+Trivandrum	Kerala
+Vadagara	Unknown
+Kodaikanal	Tamil Nadu
+Rajapalyam	Tamil Nadu
+Tiruchengodu	Tamil Nadu
+Alappuzha	Kerala
+Muvattupuza	Unknown
+Ahmedabad	Gujarat
+Kumbakonam	Tamil Nadu
+Gandhi Ngr	Gujarat
+Trichy	Tamil Nadu
+Erattupetta	Unknown
+Pannani	Unknown
+Blore	Karnataka
+Nagpur	Maharashtra
+Chertala	Unknown
+Nanminda	Unknown
+Moodbidri	Karnataka
+Kochi	Kerala
+Kottyam	Kea
+Thanjavur	Tamil Nadu
+Bluru	Unknown
+SelemChennai	Tamil Nadu
+Tirunelveli	Tamil Nadu
+Talchery	Unknown
+Egattur	Unknown
+Kannur	Kerala
+Girgaon Mumbai	Maharashtra
+Malapuram	Unknown
+Tidadi Nr Alleppy	Unknown
+Neyveli	Tamil Nadu
+Bardez Goa	Goa
+Chikkamagalur	Karnataka
+Payanur	Unknown
+Vijayawada	Andhra Pradesh
+Pudukotai	Unknown
+Alawa	Unknown
+Koratti	Unknown
+Kodumudi	Kerala
+Kollem	Kerala
+Vadagera	Unknown
+Pathanamthitta	Kerala
+Pallickal	Unknown
+Chembur Mumbai	Maharashtra
+Allupuza	Unknown
+Guruwayur	Kerala
+Goregaon Mumbai	Maharashtra
+Kozhikkode	Kerala
+Vypin	Kerala
+Eluru AP	Andhra Pradesh
+Pondichery	Tamil Nadu
+Panavel Mumbai	Maharashtra
+Pudukottai	Tamil Nadu
+Payyanur	Kerala
+Madgaon Goa	Goa
+Changangacherry	Karnataka
+Palghat	Unknown
+Kalady	Unknown
+Thalassewry	Unknown
+Gudur	Unknown
+Sulya	Karnataka
+Bokaro Steel City	Jharkhand
+Cal	Unknown
+Indore	Madhya Pradesh
+Selam	Tamil Nadu
+Kelshi	Unknown
+Alibag	Maharashtra
+Roha	Unknown
+Tiruvalla	Unknown
+Lohegaon Pune	Maharashtra
+Tirpur	Tamil Nadu
+Pattambi Palakkad	Kerala
+Dirba	Unknown
+Pandalam	Unknown
+Bichollim Goa	Goa
+Vedaranyam	Unknown
+Tanjavore	Tamil Nadu
+Vardhari Tamil Nadu	Tamil Nadu
+Muvattupuzha	Unknown
+Vellore	Tamil Nadu
+Kudal	Unknown
+Vadakkekkra	Unknown
+Kargil	Unknown
+Vikarabad	Unknown
+Hanuman Ghar	Rajastan
+Ponda Goa	Goa
+Vittal Mluru	Karnataka
+Calcutta	West Bengal
+Cumbum	Unknown
+Kalasa Cmagalur	Karnataka

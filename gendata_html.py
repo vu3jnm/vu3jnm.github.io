@@ -1,9 +1,9 @@
-import openpyxl
 from html import escape
 
+import openpyxl
+
 # Path to your spreadsheet
-input_file = "callsigns.xlsx"  # 👈 change this to your XLSX file path
-input_file = "test.xlsx"  # 👈 change this to your XLSX file path
+input_file = "2026.xlsx"  # 👈 change this to your XLSX file path
 
 # Load workbook and sheet
 wb = openpyxl.load_workbook(input_file)
@@ -18,9 +18,9 @@ html += "  <tr>\n"
 for header in headers:
     html += f"    <th>{escape(str(header))}</th>\n"
 html += "  </tr>\n"
-
+# __import__("ipdb").set_trace()
 # Read data rows
-for row in sheet.iter_rows(min_row=2, values_only=True):
+for row in sheet.iter_rows(min_row=2, values_only=False):
     html += "  <tr>\n"
     for cell in row:
         cell_text = "" if cell is None else escape(str(cell))
