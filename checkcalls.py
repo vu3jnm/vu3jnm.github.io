@@ -13,12 +13,19 @@ for i in calllists:
     if not i in filecontents:
         print(f"<tr>{i}<td> </td><td> </td> <td> </td> <td> </td></tr>")
 
+print("[localfile]Find Dupplicates....")
+
+
+for i in calllists:
+    if filecontents.count(i)>1:
+        print(f"{i} duplicated")
+
 
 url = "https://vu3jnm.co.in/searchcall.html"
 
 content = requests.get(url).text
 
-contents_list = content.split("\n")
+
 print("in web")
 for i in calllists:
     if not i in content:
