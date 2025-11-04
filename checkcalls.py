@@ -24,7 +24,7 @@ for i in calllists:
     if not i in content:
         print(f"<tr>{i}<td> </td><td> </td> <td> </td> <td> </td></tr>")
 
-print("Find Dupplicates....")
+print("[WEB]Find Dupplicates....")
 
 
 for i in calllists:
