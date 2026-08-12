@@ -22,6 +22,6 @@ jobs:
 
       - name: Generate callsign html
         env:
-          CALLSIGN: ${{ secrets.SIGN }}
+          CALLSIGN: ${{ secrets.CALLSIGN }}
           PAGEID: ${{ vars.PAGEID }}
         run: python dynamic_callsign.py
