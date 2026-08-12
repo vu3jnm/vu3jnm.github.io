@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallSign Search Utility</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #searchBox {
+            margin: 10px 5px 20px 0;
+            padding: 5px;
+            width: 220px;
+
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 20%;
+
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .highlight {
+            background-color: yellow;
+            color: black;
+            font-weight: bold;
+        }
+
+        th {
+            text-align: left;
+            background-color: #FF6B35;
+        }
+
+        .box {
+            flex: 1;
+            /* equal width for both boxes */
+            padding: 20px;
+            background-color: lightblue;
+            border: 1px solid #000;
+            text-align: center;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    Last updated on: $latest_timestamp
+    <br/>
+    <input type="text" id="searchBox" placeholder="Search as you type..." />
+    <button onclick="clearSearch()">Clear</button>
+    
+    <div id="content">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>CallSign</th>
+                    <th>Handle/Name</th>
+                    <th>QTH</th>
+                    <th>State</th>
+                    <th>Other Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                     $html_table           
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        const searchBox = document.getElementById("searchBox");
+        const table = document.getElementById("dataTable");
+        const noResults = document.getElementById("noResults");
+
+        searchBox.addEventListener("input", searchTable);
+
+        function searchTable() {
+            const filter = searchBox.value.trim().toLowerCase();
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            let visibleCount = 0;
+
+            for (let row of rows) {
+                const firstCell = row.cells[0];
+                const text = firstCell.textContent.toLowerCase();
+
+                // Clear old highlights
+                firstCell.innerHTML = firstCell.textContent;
+
+                if (filter && text.includes(filter)) {
+                    const regex = new RegExp(`(${filter})`, "gi");
+                    firstCell.innerHTML = firstCell.textContent.replace(regex, "<span class='highlight'>$1</span>");
+                    row.style.display = "";
+                    visibleCount++;
+                } else if (!filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+
+            noResults.style.display = visibleCount === 0 && filter ? "block" : "none";
+        }
+        function clearSearch() {
+            searchBox.value = "";
+            filterTable();
+        }
+    </script>
+</body>
+
+</html>
