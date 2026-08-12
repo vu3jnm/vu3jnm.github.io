@@ -1,0 +1,27 @@
+name: Update callsigns
+
+on:
+  schedule:
+    - cron: '30 * * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  update-sheet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Libraries
+        run: pip install gspread oauth2client pandas requests 
+
+      - name: Generate callsign html
+        env:
+          CALLSIGN: ${{ secrets.SIGN }}
+          PAGEID: ${{ vars.PAGEID }}
+        run: python dynamic_callsign.py
