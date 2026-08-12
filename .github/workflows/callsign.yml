@@ -24,4 +24,4 @@ jobs:
         env:
           CALLSIGN: ${{ secrets.SIGN }}
           PAGEID: ${{ vars.PAGEID }}
-        run: python dynamic_calls0gn.py
+        run: python dynamic_callsign.py
