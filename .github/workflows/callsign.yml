@@ -25,11 +25,11 @@ jobs:
           CALLSIGN: ${{ secrets.CALLSIGN }}
           PAGEID: ${{ vars.PAGEID }}
         run: python dynamic_callsign.py
-       - name: Commit and push changes
-         run: |
-           git config --global user.name "github-actions[bot]"
-           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-           git add callsign.html
-          
-           # Only commit and push if the file actually changed to avoid workflow errors
-           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update output.txt" && git push)
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add callsign.html
+         
+          # Only commit and push if the file actually changed to avoid workflow errors
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update output.txt" && git push)
