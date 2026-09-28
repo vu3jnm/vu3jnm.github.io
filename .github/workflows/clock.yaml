@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt 
 
       - name: Calculate Sunrise and Sunset Times
-        run: python sunrise_sunset.py
+        run: python sunrise_sunset_2026.py
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
