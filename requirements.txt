@@ -1,0 +1,2 @@
+# Dependencies for sunrise_sunset_2026.py
+astral>=3.2,<4
