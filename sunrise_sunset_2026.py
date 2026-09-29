@@ -62,6 +62,7 @@ main { width: min(100%, 680px); text-align: center; }
 .label { color: #a8bdca; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
 .value { margin-top: 9px; font-size: clamp(1.8rem, 7vw, 2.7rem); font-variant-numeric: tabular-nums; }
 .countdown { margin-top: 6px; color: #c2d0d8; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.verses { margin-top: 16px; line-height: 1.8; font-size: .98rem; }
 .note { margin-top: 28px; color: #a8bdca; font-size: .9rem; }
 .alarm-controls { margin-top: 26px; }
 .alarm-button { border: 1px solid #7890a1; border-radius: 999px; background: #26394a; color: #f4f6f8; padding: 11px 20px; font: inherit; cursor: pointer; }
@@ -76,8 +77,8 @@ main { width: min(100%, 680px); text-align: center; }
   <div id="clock" role="timer" aria-live="off">--:--:--</div>
   <div id="today">Loading date…</div>
   <section class="times" aria-label="Today's sun times">
-    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div></div>
-    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div></div>
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div><div class="verses" lang="sa">सूर्याय स्वाहा| सूर्याय इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div><div class="verses" lang="sa">अग्नये स्वाहा | अग्नये इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div></div>
   </section>
   <div class="alarm-controls">
     <button class="alarm-button" id="alarm-toggle" type="button">Enable sound alarms</button>
