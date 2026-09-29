@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunrise & Sunset Calculator</title>
+<style>
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101923; color: #f4f6f8; }
+* { box-sizing: border-box; }
+body { min-height: 100vh; margin: 0; padding: 24px; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 0%, #26394a, #101923 65%); }
+main { width: min(100%, 720px); text-align: center; }
+.eyebrow, .label { color: #a8bdca; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
+#clock { margin: 14px 0 4px; font-size: clamp(3.3rem, 14vw, 7rem); line-height: 1; font-variant-numeric: tabular-nums; }
+#today, #zone, .help { color: #c2d0d8; }
+.times { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 32px 0; }
+.event { padding: 20px 8px; border-top: 1px solid #526675; }
+.value { margin-top: 8px; font-size: clamp(1.6rem, 7vw, 2.5rem); font-variant-numeric: tabular-nums; }
+.countdown { margin-top: 6px; color: #c2d0d8; font-variant-numeric: tabular-nums; }
+.controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: left; }
+label { color: #c2d0d8; font-size: .9rem; }
+input, button { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #526675; border-radius: 8px; background: #172430; color: #f4f6f8; font: inherit; }
+button { cursor: pointer; background: #26394a; }
+button:hover { background: #344c60; }
+.alarm { margin-top: 18px; }
+#status { min-height: 1.5em; margin-top: 9px; color: #a8bdca; font-size: .9rem; }
+.help { margin-top: 22px; font-size: .85rem; }
+@media (max-width: 520px) { .controls { grid-template-columns: 1fr; gap: 8px; } .times { gap: 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Browser local time</div>
+  <div id="clock" role="timer" aria-live="off">--:--:--</div>
+  <div id="today">Loading date…</div>
+  <div id="zone"></div>
+  <section class="times" aria-label="Sun times">
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div></div>
+  </section>
+  <section class="controls" aria-label="Calculator inputs">
+    <label>Latitude<input id="latitude" type="number" value="15.86" min="-89.9" max="89.9" step="0.0001"></label>
+    <label>Longitude<input id="longitude" type="number" value="74.51" min="-180" max="180" step="0.0001"></label>
+    <label>Date (browser local)<input id="date" type="date"></label>
+  </section>
+  <div class="alarm">
+    <button id="alarm-button" type="button">Enable sound alarms</button>
+    <div id="status" aria-live="polite">Alarms ring 10 minutes before sunrise and sunset, and at both events.</div>
+  </div>
+  <div class="help">Sunrise/sunset use a standard 90.833° solar-horizon calculation. Keep this page open for alarms.</div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const dateInput = $('date');
+const pad = n => String(n).padStart(2, '0');
+const localDateString = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const rad = degrees => degrees * Math.PI / 180;
+const deg = radians => radians * 180 / Math.PI;
+const normalize = (value, max) => ((value % max) + max) % max;
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Browser local time';
+$('zone').textContent = `Time zone: ${timezone}`;
+
+function solarEvent(year, month, day, latitude, longitude, isSunrise) {
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const n = Math.floor((date - Date.UTC(year, 0, 0)) / 86400000);
+  const longitudeHour = longitude / 15;
+  const t = n + ((isSunrise ? 6 : 18) - longitudeHour) / 24;
+  const meanAnomaly = 0.9856 * t - 3.289;
+  const trueLongitude = normalize(meanAnomaly + 1.916 * Math.sin(rad(meanAnomaly)) + 0.020 * Math.sin(2 * rad(meanAnomaly)) + 282.634, 360);
+  let rightAscension = normalize(deg(Math.atan(0.91764 * Math.tan(rad(trueLongitude)))), 360);
+  rightAscension += Math.floor(trueLongitude / 90) * 90 - Math.floor(rightAscension / 90) * 90;
+  rightAscension /= 15;
+  const sinDeclination = 0.39782 * Math.sin(rad(trueLongitude));
+  const cosDeclination = Math.cos(Math.asin(sinDeclination));
+  const cosHourAngle = (Math.cos(rad(90.833)) - sinDeclination * Math.sin(rad(latitude))) / (cosDeclination * Math.cos(rad(latitude)));
+  if (cosHourAngle > 1 || cosHourAngle < -1) return null;
+  const hourAngle = (isSunrise ? 360 - deg(Math.acos(cosHourAngle)) : deg(Math.acos(cosHourAngle))) / 15;
+  const localMeanTime = hourAngle + rightAscension - 0.06571 * t - 6.622;
+  const utcHour = localMeanTime - longitudeHour;
+  return new Date(Date.UTC(year, month - 1, day) + utcHour * 3600000);
+}
+
+function formatTime(date) {
+  return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(date);
+}
+function countdown(now, target, nextTarget) {
+  if (!target) return 'Unavailable for this location/date';
+  if (target <= now) target = nextTarget;
+  if (!target) return 'Unavailable for next date';
+  const secondsLeft = Math.floor((target - now) / 1000);
+  const days = Math.floor(secondsLeft / 86400);
+  const h = Math.floor(secondsLeft % 86400 / 3600);
+  const m = Math.floor(secondsLeft % 3600 / 60);
+  const s = secondsLeft % 60;
+  return `${days ? `${days}d ` : ''}${pad(h)}:${pad(m)}:${pad(s)} until next`;
+}
+
+let enabled = false;
+let audio = null;
+const fired = new Set();
+function beep(hz, delay) {
+  const start = audio.currentTime + delay;
+  const oscillator = audio.createOscillator();
+  const gain = audio.createGain();
+  oscillator.frequency.value = hz;
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(0.2, start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
+  oscillator.connect(gain); gain.connect(audio.destination);
+  oscillator.start(start); oscillator.stop(start + 0.3);
+}
+function ring(label, key) {
+  if (!enabled || fired.has(key)) return;
+  fired.add(key);
+  beep(880, 0); beep(660, 0.38); beep(880, 0.76);
+  $('status').textContent = `Alarm: ${label}`;
+}
+$('alarm-button').addEventListener('click', async () => {
+  if (enabled) {
+    enabled = false;
+    $('alarm-button').textContent = 'Enable sound alarms';
+    $('status').textContent = 'Sound alarms are off.';
+    return;
+  }
+  const Audio = window.AudioContext || window.webkitAudioContext;
+  if (!Audio) { $('status').textContent = 'This browser does not support sound alarms.'; return; }
+  audio = audio || new Audio();
+  if (audio.state === 'suspended') await audio.resume();
+  enabled = true; beep(660, 0);
+  $('alarm-button').textContent = 'Turn sound alarms off';
+  $('status').textContent = 'Sound alarms are on. Keep this page open.';
+});
+
+function update() {
+  const now = new Date();
+  $('clock').textContent = formatTime(now);
+  $('today').textContent = new Intl.DateTimeFormat(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(now);
+  if (document.activeElement !== dateInput) dateInput.value = localDateString(now);
+  const [year, month, day] = dateInput.value.split('-').map(Number);
+  const lat = Number($('latitude').value), lon = Number($('longitude').value);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) >= 90 || Math.abs(lon) > 180 || !year) return;
+  const sunrise = solarEvent(year, month, day, lat, lon, true);
+  const sunset = solarEvent(year, month, day, lat, lon, false);
+  const tomorrow = new Date(year, month - 1, day + 1);
+  const nextSunrise = solarEvent(tomorrow.getFullYear(), tomorrow.getMonth() + 1, tomorrow.getDate(), lat, lon, true);
+  const nextSunset = solarEvent(tomorrow.getFullYear(), tomorrow.getMonth() + 1, tomorrow.getDate(), lat, lon, false);
+  $('sunrise').textContent = sunrise ? formatTime(sunrise) : 'No sunrise';
+  $('sunset').textContent = sunset ? formatTime(sunset) : 'No sunset';
+  const selectedIsToday = dateInput.value === localDateString(now);
+  $('sunrise-countdown').textContent = selectedIsToday ? countdown(now, sunrise, nextSunrise) : 'Select today for live countdown';
+  $('sunset-countdown').textContent = selectedIsToday ? countdown(now, sunset, nextSunset) : 'Select today for live countdown';
+  if (selectedIsToday && enabled) {
+    for (const [name, event, title] of [['sunrise', sunrise, 'Sunrise'], ['sunset', sunset, 'Sunset']]) {
+      if (!event) continue;
+      for (const [at, label] of [[event.getTime() - 600000, `${title} in 10 minutes`], [event.getTime(), title]]) {
+        const key = `${dateInput.value}-${name}-${at}`;
+        if (now.getTime() >= at && now.getTime() < at + 1500) ring(label, key);
+      }
+    }
+  }
+}
+$('latitude').addEventListener('input', update);
+$('longitude').addEventListener('input', update);
+$('date').addEventListener('change', update);
+update();
+setInterval(update, 1000);
+</script>
+</body>
+</html>
