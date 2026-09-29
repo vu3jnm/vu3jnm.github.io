@@ -17,6 +17,7 @@ main { width: min(100%, 720px); text-align: center; }
 .value { margin-top: 8px; font-size: clamp(1.6rem, 7vw, 2.5rem); font-variant-numeric: tabular-nums; }
 .countdown { margin-top: 6px; color: #c2d0d8; font-variant-numeric: tabular-nums; }
 .verses { margin-top: 16px; line-height: 1.8; font-size: .98rem; }
+.read-button { width: auto; margin-top: 12px; padding: 8px 14px; font-size: .9rem; }
 .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: left; }
 label { color: #c2d0d8; font-size: .9rem; }
 input, button { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #526675; border-radius: 8px; background: #172430; color: #f4f6f8; font: inherit; }
@@ -35,8 +36,8 @@ button:hover { background: #344c60; }
   <div id="today">Loading date…</div>
   <div id="zone"></div>
   <section class="times" aria-label="Sun times">
-    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div><div class="verses" lang="sa">सूर्याय स्वाहा| सूर्याय इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div></div>
-    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div><div class="verses" lang="sa">अग्नये स्वाहा | अग्नये इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div></div>
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div><div class="verses" lang="sa" id="sunrise-verses">सूर्याय स्वाहा| सूर्याय इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div><button class="read-button" type="button" data-read="sunrise-verses">Read aloud</button></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div><div class="verses" lang="sa" id="sunset-verses">अग्नये स्वाहा | अग्नये इदम् न मम<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम</div><button class="read-button" type="button" data-read="sunset-verses">Read aloud</button></div>
   </section>
   <section class="controls" aria-label="Calculator inputs">
     <label>Latitude<input id="latitude" type="number" value="15.86" min="-89.9" max="89.9" step="0.0001"></label>
@@ -59,6 +60,27 @@ const deg = radians => radians * 180 / Math.PI;
 const normalize = (value, max) => ((value % max) + max) % max;
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Browser local time';
 $('zone').textContent = `Time zone: ${timezone}`;
+
+document.querySelectorAll('[data-read]').forEach(button => {
+  button.addEventListener('click', () => {
+    if (!("speechSynthesis" in window)) {
+      $('status').textContent = 'Speech output is not supported by this browser.';
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const text = $(button.dataset.read).innerText.replace(/\s*\n\s*/g, '. ');
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'sa-IN';
+    const voices = window.speechSynthesis.getVoices();
+    utterance.voice = voices.find(voice => voice.lang.toLowerCase().startsWith('sa'))
+      || voices.find(voice => voice.lang.toLowerCase().startsWith('hi'))
+      || null;
+    utterance.onstart = () => $('status').textContent = 'Reading Sanskrit aloud…';
+    utterance.onend = () => $('status').textContent = 'Finished reading.';
+    utterance.onerror = () => $('status').textContent = 'Could not read aloud. Check that your browser has a suitable voice installed.';
+    window.speechSynthesis.speak(utterance);
+  });
+});
 
 function solarEvent(year, month, day, latitude, longitude, isSunrise) {
   const date = new Date(Date.UTC(year, month - 1, day));
