@@ -61,6 +61,7 @@ main { width: min(100%, 680px); text-align: center; }
 .event { padding: 22px 12px; border-top: 1px solid #526675; }
 .label { color: #a8bdca; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
 .value { margin-top: 9px; font-size: clamp(1.8rem, 7vw, 2.7rem); font-variant-numeric: tabular-nums; }
+.countdown { margin-top: 6px; color: #c2d0d8; font-size: .92rem; font-variant-numeric: tabular-nums; }
 .note { margin-top: 28px; color: #a8bdca; font-size: .9rem; }
 .alarm-controls { margin-top: 26px; }
 .alarm-button { border: 1px solid #7890a1; border-radius: 999px; background: #26394a; color: #f4f6f8; padding: 11px 20px; font: inherit; cursor: pointer; }
@@ -75,8 +76,8 @@ main { width: min(100%, 680px); text-align: center; }
   <div id="clock" role="timer" aria-live="off">--:--:--</div>
   <div id="today">Loading date…</div>
   <section class="times" aria-label="Today's sun times">
-    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div></div>
-    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div></div>
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div></div>
   </section>
   <div class="alarm-controls">
     <button class="alarm-button" id="alarm-toggle" type="button">Enable sound alarms</button>
@@ -140,6 +141,19 @@ function checkAlarms(now, localDate, entry) {
   }
 }
 
+function nextEventCountdown(now, localDate, eventTime) {
+  if (!eventTime) return "No 2026 data";
+  const target = new Date(`${localDate}T${eventTime}+05:30`);
+  if (now >= target) target.setTime(target.getTime() + 86400000);
+  const totalSeconds = Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const time = [hours, minutes, seconds].map(value => String(value).padStart(2, "0")).join(":");
+  return days ? `${days}d ${time} until next` : `${time} until next`;
+}
+
 document.getElementById("alarm-toggle").addEventListener("click", async () => {
   if (alarmsEnabled) {
     alarmsEnabled = false;
@@ -169,8 +183,10 @@ function updateClock() {
   }).format(now);
   const entry = sunTimes.find(item => item.date === localDate);
   checkAlarms(now, localDate, entry);
-  document.getElementById("sunrise").textContent = entry ? entry.sunrise.slice(0, 5) : "—";
-  document.getElementById("sunset").textContent = entry ? entry.sunset.slice(0, 5) : "—";
+  document.getElementById("sunrise").textContent = entry ? entry.sunrise : "—";
+  document.getElementById("sunset").textContent = entry ? entry.sunset : "—";
+  document.getElementById("sunrise-countdown").textContent = nextEventCountdown(now, localDate, entry && entry.sunrise);
+  document.getElementById("sunset-countdown").textContent = nextEventCountdown(now, localDate, entry && entry.sunset);
   document.getElementById("note").textContent = entry
     ? "15.86° N, 74.51° E · 2026 almanac"
     : "Sunrise and sunset data is available for 2026 only · 15.86° N, 74.51° E";
@@ -189,7 +205,7 @@ def main():
         description="Create 2026 sunrise/sunset data and a live local digital clock."
     )
     parser.add_argument("--output", default="sunrise_sunset_2026.csv", help="CSV output path")
-    parser.add_argument("--clock", default="clock.html", help="Clock webpage path")
+    parser.add_argument("--clock", default="sunrise_sunset_clock.html", help="Clock webpage path")
     args = parser.parse_args()
 
     rows = calculate_days()
