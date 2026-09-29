@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunrise & Sunset Clock — 2026</title>
+<style>
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101923; color: #f4f6f8; }
+* { box-sizing: border-box; }
+body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(ellipse at 50% 0%, #26394a, #101923 65%); }
+main { width: min(100%, 680px); text-align: center; }
+.eyebrow { color: #a8bdca; letter-spacing: .16em; text-transform: uppercase; font-size: .78rem; }
+#clock { margin: 14px 0 4px; font-size: clamp(3.6rem, 14vw, 7.8rem); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: .03em; }
+#today { color: #c2d0d8; font-size: 1.08rem; }
+.times { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; }
+.event { padding: 22px 12px; border-top: 1px solid #526675; }
+.label { color: #a8bdca; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
+.value { margin-top: 9px; font-size: clamp(1.8rem, 7vw, 2.7rem); font-variant-numeric: tabular-nums; }
+.countdown { margin-top: 6px; color: #c2d0d8; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.note { margin-top: 28px; color: #a8bdca; font-size: .9rem; }
+.alarm-controls { margin-top: 26px; }
+.alarm-button { border: 1px solid #7890a1; border-radius: 999px; background: #26394a; color: #f4f6f8; padding: 11px 20px; font: inherit; cursor: pointer; }
+.alarm-button:hover { background: #344c60; }
+#alarm-status { min-height: 1.5em; margin-top: 10px; color: #a8bdca; font-size: .9rem; }
+@media (max-width: 420px) { .times { gap: 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Local time · Asia/Kolkata</div>
+  <div id="clock" role="timer" aria-live="off">--:--:--</div>
+  <div id="today">Loading date…</div>
+  <section class="times" aria-label="Today's sun times">
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div></div>
+  </section>
+  <div class="alarm-controls">
+    <button class="alarm-button" id="alarm-toggle" type="button">Enable sound alarms</button>
+    <div id="alarm-status" aria-live="polite">Enable sound to hear alarms. Keep this page open.</div>
+  </div>
+  <div class="note" id="note">15.86° N, 74.51° E · 2026 almanac</div>
+</main>
+<script>
+const sunTimes = [{"date":"2026-01-01","sunrise":"06:59:27","sunset":"18:11:27"},{"date":"2026-01-02","sunrise":"06:59:48","sunset":"18:12:02"},{"date":"2026-01-03","sunrise":"07:00:09","sunset":"18:12:37"},{"date":"2026-01-04","sunrise":"07:00:28","sunset":"18:13:13"},{"date":"2026-01-05","sunrise":"07:00:47","sunset":"18:13:48"},{"date":"2026-01-06","sunrise":"07:01:04","sunset":"18:14:24"},{"date":"2026-01-07","sunrise":"07:01:21","sunset":"18:15:00"},{"date":"2026-01-08","sunrise":"07:01:36","sunset":"18:15:36"},{"date":"2026-01-09","sunrise":"07:01:51","sunset":"18:16:12"},{"date":"2026-01-10","sunrise":"07:02:04","sunset":"18:16:48"},{"date":"2026-01-11","sunrise":"07:02:16","sunset":"18:17:24"},{"date":"2026-01-12","sunrise":"07:02:28","sunset":"18:18:00"},{"date":"2026-01-13","sunrise":"07:02:38","sunset":"18:18:36"},{"date":"2026-01-14","sunrise":"07:02:47","sunset":"18:19:11"},{"date":"2026-01-15","sunrise":"07:02:54","sunset":"18:19:47"},{"date":"2026-01-16","sunrise":"07:03:01","sunset":"18:20:22"},{"date":"2026-01-17","sunrise":"07:03:06","sunset":"18:20:57"},{"date":"2026-01-18","sunrise":"07:03:11","sunset":"18:21:32"},{"date":"2026-01-19","sunrise":"07:03:14","sunset":"18:22:07"},{"date":"2026-01-20","sunrise":"07:03:16","sunset":"18:22:41"},{"date":"2026-01-21","sunrise":"07:03:17","sunset":"18:23:15"},{"date":"2026-01-22","sunrise":"07:03:16","sunset":"18:23:49"},{"date":"2026-01-23","sunrise":"07:03:15","sunset":"18:24:22"},{"date":"2026-01-24","sunrise":"07:03:12","sunset":"18:24:55"},{"date":"2026-01-25","sunrise":"07:03:08","sunset":"18:25:28"},{"date":"2026-01-26","sunrise":"07:03:03","sunset":"18:26:00"},{"date":"2026-01-27","sunrise":"07:02:57","sunset":"18:26:31"},{"date":"2026-01-28","sunrise":"07:02:49","sunset":"18:27:03"},{"date":"2026-01-29","sunrise":"07:02:41","sunset":"18:27:33"},{"date":"2026-01-30","sunrise":"07:02:31","sunset":"18:28:04"},{"date":"2026-01-31","sunrise":"07:02:20","sunset":"18:28:33"},{"date":"2026-02-01","sunrise":"07:02:08","sunset":"18:29:03"},{"date":"2026-02-02","sunrise":"07:01:55","sunset":"18:29:31"},{"date":"2026-02-03","sunrise":"07:01:40","sunset":"18:30:00"},{"date":"2026-02-04","sunrise":"07:01:25","sunset":"18:30:27"},{"date":"2026-02-05","sunrise":"07:01:09","sunset":"18:30:54"},{"date":"2026-02-06","sunrise":"07:00:51","sunset":"18:31:21"},{"date":"2026-02-07","sunrise":"07:00:32","sunset":"18:31:47"},{"date":"2026-02-08","sunrise":"07:00:13","sunset":"18:32:12"},{"date":"2026-02-09","sunrise":"06:59:52","sunset":"18:32:37"},{"date":"2026-02-10","sunrise":"06:59:30","sunset":"18:33:02"},{"date":"2026-02-11","sunrise":"06:59:07","sunset":"18:33:26"},{"date":"2026-02-12","sunrise":"06:58:43","sunset":"18:33:49"},{"date":"2026-02-13","sunrise":"06:58:19","sunset":"18:34:11"},{"date":"2026-02-14","sunrise":"06:57:53","sunset":"18:34:34"},{"date":"2026-02-15","sunrise":"06:57:26","sunset":"18:34:55"},{"date":"2026-02-16","sunrise":"06:56:59","sunset":"18:35:16"},{"date":"2026-02-17","sunrise":"06:56:30","sunset":"18:35:37"},{"date":"2026-02-18","sunrise":"06:56:01","sunset":"18:35:57"},{"date":"2026-02-19","sunrise":"06:55:31","sunset":"18:36:16"},{"date":"2026-02-20","sunrise":"06:55:00","sunset":"18:36:35"},{"date":"2026-02-21","sunrise":"06:54:28","sunset":"18:36:53"},{"date":"2026-02-22","sunrise":"06:53:55","sunset":"18:37:11"},{"date":"2026-02-23","sunrise":"06:53:22","sunset":"18:37:28"},{"date":"2026-02-24","sunrise":"06:52:48","sunset":"18:37:45"},{"date":"2026-02-25","sunrise":"06:52:13","sunset":"18:38:02"},{"date":"2026-02-26","sunrise":"06:51:37","sunset":"18:38:17"},{"date":"2026-02-27","sunrise":"06:51:01","sunset":"18:38:33"},{"date":"2026-02-28","sunrise":"06:50:24","sunset":"18:38:48"},{"date":"2026-03-01","sunrise":"06:49:47","sunset":"18:39:03"},{"date":"2026-03-02","sunrise":"06:49:09","sunset":"18:39:17"},{"date":"2026-03-03","sunrise":"06:48:30","sunset":"18:39:30"},{"date":"2026-03-04","sunrise":"06:47:51","sunset":"18:39:44"},{"date":"2026-03-05","sunrise":"06:47:11","sunset":"18:39:57"},{"date":"2026-03-06","sunrise":"06:46:31","sunset":"18:40:10"},{"date":"2026-03-07","sunrise":"06:45:50","sunset":"18:40:22"},{"date":"2026-03-08","sunrise":"06:45:09","sunset":"18:40:34"},{"date":"2026-03-09","sunrise":"06:44:27","sunset":"18:40:45"},{"date":"2026-03-10","sunrise":"06:43:45","sunset":"18:40:57"},{"date":"2026-03-11","sunrise":"06:43:03","sunset":"18:41:08"},{"date":"2026-03-12","sunrise":"06:42:20","sunset":"18:41:19"},{"date":"2026-03-13","sunrise":"06:41:37","sunset":"18:41:29"},{"date":"2026-03-14","sunrise":"06:40:54","sunset":"18:41:40"},{"date":"2026-03-15","sunrise":"06:40:11","sunset":"18:41:50"},{"date":"2026-03-16","sunrise":"06:39:27","sunset":"18:42:00"},{"date":"2026-03-17","sunrise":"06:38:43","sunset":"18:42:09"},{"date":"2026-03-18","sunrise":"06:37:58","sunset":"18:42:19"},{"date":"2026-03-19","sunrise":"06:37:14","sunset":"18:42:28"},{"date":"2026-03-20","sunrise":"06:36:29","sunset":"18:42:37"},{"date":"2026-03-21","sunrise":"06:35:45","sunset":"18:42:47"},{"date":"2026-03-22","sunrise":"06:35:00","sunset":"18:42:56"},{"date":"2026-03-23","sunrise":"06:34:15","sunset":"18:43:05"},{"date":"2026-03-24","sunrise":"06:33:30","sunset":"18:43:13"},{"date":"2026-03-25","sunrise":"06:32:45","sunset":"18:43:22"},{"date":"2026-03-26","sunrise":"06:32:00","sunset":"18:43:31"},{"date":"2026-03-27","sunrise":"06:31:15","sunset":"18:43:40"},{"date":"2026-03-28","sunrise":"06:30:30","sunset":"18:43:48"},{"date":"2026-03-29","sunrise":"06:29:46","sunset":"18:43:57"},{"date":"2026-03-30","sunrise":"06:29:01","sunset":"18:44:06"},{"date":"2026-03-31","sunrise":"06:28:16","sunset":"18:44:15"},{"date":"2026-04-01","sunrise":"06:27:32","sunset":"18:44:23"},{"date":"2026-04-02","sunrise":"06:26:47","sunset":"18:44:32"},{"date":"2026-04-03","sunrise":"06:26:03","sunset":"18:44:41"},{"date":"2026-04-04","sunrise":"06:25:19","sunset":"18:44:50"},{"date":"2026-04-05","sunrise":"06:24:36","sunset":"18:45:00"},{"date":"2026-04-06","sunrise":"06:23:52","sunset":"18:45:09"},{"date":"2026-04-07","sunrise":"06:23:09","sunset":"18:45:18"},{"date":"2026-04-08","sunrise":"06:22:26","sunset":"18:45:28"},{"date":"2026-04-09","sunrise":"06:21:44","sunset":"18:45:37"},{"date":"2026-04-10","sunrise":"06:21:02","sunset":"18:45:47"},{"date":"2026-04-11","sunrise":"06:20:20","sunset":"18:45:57"},{"date":"2026-04-12","sunrise":"06:19:38","sunset":"18:46:08"},{"date":"2026-04-13","sunrise":"06:18:57","sunset":"18:46:18"},{"date":"2026-04-14","sunrise":"06:18:17","sunset":"18:46:29"},{"date":"2026-04-15","sunrise":"06:17:37","sunset":"18:46:40"},{"date":"2026-04-16","sunrise":"06:16:57","sunset":"18:46:51"},{"date":"2026-04-17","sunrise":"06:16:18","sunset":"18:47:02"},{"date":"2026-04-18","sunrise":"06:15:39","sunset":"18:47:14"},{"date":"2026-04-19","sunrise":"06:15:01","sunset":"18:47:25"},{"date":"2026-04-20","sunrise":"06:14:24","sunset":"18:47:37"},{"date":"2026-04-21","sunrise":"06:13:47","sunset":"18:47:50"},{"date":"2026-04-22","sunrise":"06:13:10","sunset":"18:48:02"},{"date":"2026-04-23","sunrise":"06:12:34","sunset":"18:48:15"},{"date":"2026-04-24","sunrise":"06:11:59","sunset":"18:48:29"},{"date":"2026-04-25","sunrise":"06:11:25","sunset":"18:48:42"},{"date":"2026-04-26","sunrise":"06:10:51","sunset":"18:48:56"},{"date":"2026-04-27","sunrise":"06:10:18","sunset":"18:49:10"},{"date":"2026-04-28","sunrise":"06:09:45","sunset":"18:49:24"},{"date":"2026-04-29","sunrise":"06:09:14","sunset":"18:49:39"},{"date":"2026-04-30","sunrise":"06:08:43","sunset":"18:49:54"},{"date":"2026-05-01","sunrise":"06:08:12","sunset":"18:50:09"},{"date":"2026-05-02","sunrise":"06:07:43","sunset":"18:50:25"},{"date":"2026-05-03","sunrise":"06:07:14","sunset":"18:50:40"},{"date":"2026-05-04","sunrise":"06:06:46","sunset":"18:50:57"},{"date":"2026-05-05","sunrise":"06:06:19","sunset":"18:51:13"},{"date":"2026-05-06","sunrise":"06:05:53","sunset":"18:51:30"},{"date":"2026-05-07","sunrise":"06:05:28","sunset":"18:51:47"},{"date":"2026-05-08","sunrise":"06:05:03","sunset":"18:52:04"},{"date":"2026-05-09","sunrise":"06:04:39","sunset":"18:52:22"},{"date":"2026-05-10","sunrise":"06:04:17","sunset":"18:52:39"},{"date":"2026-05-11","sunrise":"06:03:55","sunset":"18:52:58"},{"date":"2026-05-12","sunrise":"06:03:33","sunset":"18:53:16"},{"date":"2026-05-13","sunrise":"06:03:13","sunset":"18:53:34"},{"date":"2026-05-14","sunrise":"06:02:54","sunset":"18:53:53"},{"date":"2026-05-15","sunrise":"06:02:36","sunset":"18:54:12"},{"date":"2026-05-16","sunrise":"06:02:18","sunset":"18:54:31"},{"date":"2026-05-17","sunrise":"06:02:02","sunset":"18:54:51"},{"date":"2026-05-18","sunrise":"06:01:46","sunset":"18:55:10"},{"date":"2026-05-19","sunrise":"06:01:32","sunset":"18:55:30"},{"date":"2026-05-20","sunrise":"06:01:18","sunset":"18:55:50"},{"date":"2026-05-21","sunrise":"06:01:05","sunset":"18:56:10"},{"date":"2026-05-22","sunrise":"06:00:53","sunset":"18:56:30"},{"date":"2026-05-23","sunrise":"06:00:42","sunset":"18:56:51"},{"date":"2026-05-24","sunrise":"06:00:32","sunset":"18:57:11"},{"date":"2026-05-25","sunrise":"06:00:23","sunset":"18:57:31"},{"date":"2026-05-26","sunrise":"06:00:15","sunset":"18:57:52"},{"date":"2026-05-27","sunrise":"06:00:08","sunset":"18:58:12"},{"date":"2026-05-28","sunrise":"06:00:02","sunset":"18:58:33"},{"date":"2026-05-29","sunrise":"05:59:57","sunset":"18:58:53"},{"date":"2026-05-30","sunrise":"05:59:52","sunset":"18:59:13"},{"date":"2026-05-31","sunrise":"05:59:49","sunset":"18:59:34"},{"date":"2026-06-01","sunrise":"05:59:46","sunset":"18:59:54"},{"date":"2026-06-02","sunrise":"05:59:45","sunset":"19:00:14"},{"date":"2026-06-03","sunrise":"05:59:44","sunset":"19:00:34"},{"date":"2026-06-04","sunrise":"05:59:44","sunset":"19:00:54"},{"date":"2026-06-05","sunrise":"05:59:45","sunset":"19:01:14"},{"date":"2026-06-06","sunrise":"05:59:47","sunset":"19:01:33"},{"date":"2026-06-07","sunrise":"05:59:50","sunset":"19:01:52"},{"date":"2026-06-08","sunrise":"05:59:53","sunset":"19:02:11"},{"date":"2026-06-09","sunrise":"05:59:57","sunset":"19:02:30"},{"date":"2026-06-10","sunrise":"06:00:03","sunset":"19:02:48"},{"date":"2026-06-11","sunrise":"06:00:08","sunset":"19:03:06"},{"date":"2026-06-12","sunrise":"06:00:15","sunset":"19:03:24"},{"date":"2026-06-13","sunrise":"06:00:22","sunset":"19:03:41"},{"date":"2026-06-14","sunrise":"06:00:31","sunset":"19:03:58"},{"date":"2026-06-15","sunrise":"06:00:39","sunset":"19:04:14"},{"date":"2026-06-16","sunrise":"06:00:49","sunset":"19:04:30"},{"date":"2026-06-17","sunrise":"06:00:59","sunset":"19:04:46"},{"date":"2026-06-18","sunrise":"06:01:10","sunset":"19:05:00"},{"date":"2026-06-19","sunrise":"06:01:21","sunset":"19:05:15"},{"date":"2026-06-20","sunrise":"06:01:33","sunset":"19:05:29"},{"date":"2026-06-21","sunrise":"06:01:46","sunset":"19:05:42"},{"date":"2026-06-22","sunrise":"06:01:59","sunset":"19:05:54"},{"date":"2026-06-23","sunrise":"06:02:13","sunset":"19:06:06"},{"date":"2026-06-24","sunrise":"06:02:27","sunset":"19:06:18"},{"date":"2026-06-25","sunrise":"06:02:42","sunset":"19:06:28"},{"date":"2026-06-26","sunrise":"06:02:57","sunset":"19:06:38"},{"date":"2026-06-27","sunrise":"06:03:12","sunset":"19:06:48"},{"date":"2026-06-28","sunrise":"06:03:28","sunset":"19:06:56"},{"date":"2026-06-29","sunrise":"06:03:44","sunset":"19:07:04"},{"date":"2026-06-30","sunrise":"06:04:01","sunset":"19:07:11"},{"date":"2026-07-01","sunrise":"06:04:18","sunset":"19:07:17"},{"date":"2026-07-02","sunrise":"06:04:35","sunset":"19:07:22"},{"date":"2026-07-03","sunrise":"06:04:53","sunset":"19:07:27"},{"date":"2026-07-04","sunrise":"06:05:11","sunset":"19:07:30"},{"date":"2026-07-05","sunrise":"06:05:29","sunset":"19:07:33"},{"date":"2026-07-06","sunrise":"06:05:47","sunset":"19:07:35"},{"date":"2026-07-07","sunrise":"06:06:06","sunset":"19:07:36"},{"date":"2026-07-08","sunrise":"06:06:24","sunset":"19:07:36"},{"date":"2026-07-09","sunrise":"06:06:43","sunset":"19:07:35"},{"date":"2026-07-10","sunrise":"06:07:02","sunset":"19:07:33"},{"date":"2026-07-11","sunrise":"06:07:20","sunset":"19:07:31"},{"date":"2026-07-12","sunrise":"06:07:39","sunset":"19:07:27"},{"date":"2026-07-13","sunrise":"06:07:58","sunset":"19:07:23"},{"date":"2026-07-14","sunrise":"06:08:17","sunset":"19:07:17"},{"date":"2026-07-15","sunrise":"06:08:36","sunset":"19:07:11"},{"date":"2026-07-16","sunrise":"06:08:55","sunset":"19:07:03"},{"date":"2026-07-17","sunrise":"06:09:14","sunset":"19:06:55"},{"date":"2026-07-18","sunrise":"06:09:33","sunset":"19:06:45"},{"date":"2026-07-19","sunrise":"06:09:51","sunset":"19:06:35"},{"date":"2026-07-20","sunrise":"06:10:10","sunset":"19:06:24"},{"date":"2026-07-21","sunrise":"06:10:28","sunset":"19:06:11"},{"date":"2026-07-22","sunrise":"06:10:46","sunset":"19:05:58"},{"date":"2026-07-23","sunrise":"06:11:05","sunset":"19:05:44"},{"date":"2026-07-24","sunrise":"06:11:22","sunset":"19:05:28"},{"date":"2026-07-25","sunrise":"06:11:40","sunset":"19:05:12"},{"date":"2026-07-26","sunrise":"06:11:58","sunset":"19:04:55"},{"date":"2026-07-27","sunrise":"06:12:15","sunset":"19:04:37"},{"date":"2026-07-28","sunrise":"06:12:32","sunset":"19:04:18"},{"date":"2026-07-29","sunrise":"06:12:49","sunset":"19:03:57"},{"date":"2026-07-30","sunrise":"06:13:05","sunset":"19:03:36"},{"date":"2026-07-31","sunrise":"06:13:21","sunset":"19:03:14"},{"date":"2026-08-01","sunrise":"06:13:37","sunset":"19:02:52"},{"date":"2026-08-02","sunrise":"06:13:53","sunset":"19:02:28"},{"date":"2026-08-03","sunrise":"06:14:08","sunset":"19:02:03"},{"date":"2026-08-04","sunrise":"06:14:23","sunset":"19:01:37"},{"date":"2026-08-05","sunrise":"06:14:38","sunset":"19:01:11"},{"date":"2026-08-06","sunrise":"06:14:52","sunset":"19:00:43"},{"date":"2026-08-07","sunrise":"06:15:06","sunset":"19:00:15"},{"date":"2026-08-08","sunrise":"06:15:20","sunset":"18:59:46"},{"date":"2026-08-09","sunrise":"06:15:34","sunset":"18:59:16"},{"date":"2026-08-10","sunrise":"06:15:47","sunset":"18:58:45"},{"date":"2026-08-11","sunrise":"06:15:59","sunset":"18:58:14"},{"date":"2026-08-12","sunrise":"06:16:12","sunset":"18:57:42"},{"date":"2026-08-13","sunrise":"06:16:24","sunset":"18:57:08"},{"date":"2026-08-14","sunrise":"06:16:36","sunset":"18:56:35"},{"date":"2026-08-15","sunrise":"06:16:47","sunset":"18:56:00"},{"date":"2026-08-16","sunrise":"06:16:58","sunset":"18:55:25"},{"date":"2026-08-17","sunrise":"06:17:09","sunset":"18:54:49"},{"date":"2026-08-18","sunrise":"06:17:19","sunset":"18:54:12"},{"date":"2026-08-19","sunrise":"06:17:30","sunset":"18:53:34"},{"date":"2026-08-20","sunrise":"06:17:39","sunset":"18:52:56"},{"date":"2026-08-21","sunrise":"06:17:49","sunset":"18:52:18"},{"date":"2026-08-22","sunrise":"06:17:58","sunset":"18:51:38"},{"date":"2026-08-23","sunrise":"06:18:07","sunset":"18:50:58"},{"date":"2026-08-24","sunrise":"06:18:16","sunset":"18:50:18"},{"date":"2026-08-25","sunrise":"06:18:24","sunset":"18:49:37"},{"date":"2026-08-26","sunrise":"06:18:32","sunset":"18:48:55"},{"date":"2026-08-27","sunrise":"06:18:40","sunset":"18:48:13"},{"date":"2026-08-28","sunrise":"06:18:47","sunset":"18:47:31"},{"date":"2026-08-29","sunrise":"06:18:55","sunset":"18:46:48"},{"date":"2026-08-30","sunrise":"06:19:02","sunset":"18:46:04"},{"date":"2026-08-31","sunrise":"06:19:09","sunset":"18:45:20"},{"date":"2026-09-01","sunrise":"06:19:15","sunset":"18:44:36"},{"date":"2026-09-02","sunrise":"06:19:22","sunset":"18:43:51"},{"date":"2026-09-03","sunrise":"06:19:28","sunset":"18:43:06"},{"date":"2026-09-04","sunrise":"06:19:34","sunset":"18:42:21"},{"date":"2026-09-05","sunrise":"06:19:40","sunset":"18:41:35"},{"date":"2026-09-06","sunrise":"06:19:46","sunset":"18:40:49"},{"date":"2026-09-07","sunrise":"06:19:51","sunset":"18:40:02"},{"date":"2026-09-08","sunrise":"06:19:57","sunset":"18:39:16"},{"date":"2026-09-09","sunrise":"06:20:02","sunset":"18:38:29"},{"date":"2026-09-10","sunrise":"06:20:08","sunset":"18:37:42"},{"date":"2026-09-11","sunrise":"06:20:13","sunset":"18:36:55"},{"date":"2026-09-12","sunrise":"06:20:18","sunset":"18:36:07"},{"date":"2026-09-13","sunrise":"06:20:23","sunset":"18:35:20"},{"date":"2026-09-14","sunrise":"06:20:28","sunset":"18:34:32"},{"date":"2026-09-15","sunrise":"06:20:33","sunset":"18:33:45"},{"date":"2026-09-16","sunrise":"06:20:38","sunset":"18:32:57"},{"date":"2026-09-17","sunrise":"06:20:43","sunset":"18:32:09"},{"date":"2026-09-18","sunrise":"06:20:48","sunset":"18:31:21"},{"date":"2026-09-19","sunrise":"06:20:53","sunset":"18:30:33"},{"date":"2026-09-20","sunrise":"06:20:58","sunset":"18:29:45"},{"date":"2026-09-21","sunrise":"06:21:03","sunset":"18:28:58"},{"date":"2026-09-22","sunrise":"06:21:09","sunset":"18:28:10"},{"date":"2026-09-23","sunrise":"06:21:14","sunset":"18:27:22"},{"date":"2026-09-24","sunrise":"06:21:19","sunset":"18:26:35"},{"date":"2026-09-25","sunrise":"06:21:25","sunset":"18:25:47"},{"date":"2026-09-26","sunrise":"06:21:31","sunset":"18:25:00"},{"date":"2026-09-27","sunrise":"06:21:37","sunset":"18:24:13"},{"date":"2026-09-28","sunrise":"06:21:43","sunset":"18:23:26"},{"date":"2026-09-29","sunrise":"06:21:49","sunset":"18:22:40"},{"date":"2026-09-30","sunrise":"06:21:56","sunset":"18:21:53"},{"date":"2026-10-01","sunrise":"06:22:02","sunset":"18:21:07"},{"date":"2026-10-02","sunrise":"06:22:09","sunset":"18:20:22"},{"date":"2026-10-03","sunrise":"06:22:17","sunset":"18:19:36"},{"date":"2026-10-04","sunrise":"06:22:24","sunset":"18:18:51"},{"date":"2026-10-05","sunrise":"06:22:32","sunset":"18:18:07"},{"date":"2026-10-06","sunrise":"06:22:40","sunset":"18:17:23"},{"date":"2026-10-07","sunrise":"06:22:49","sunset":"18:16:39"},{"date":"2026-10-08","sunrise":"06:22:58","sunset":"18:15:56"},{"date":"2026-10-09","sunrise":"06:23:07","sunset":"18:15:13"},{"date":"2026-10-10","sunrise":"06:23:16","sunset":"18:14:31"},{"date":"2026-10-11","sunrise":"06:23:26","sunset":"18:13:49"},{"date":"2026-10-12","sunrise":"06:23:37","sunset":"18:13:08"},{"date":"2026-10-13","sunrise":"06:23:47","sunset":"18:12:27"},{"date":"2026-10-14","sunrise":"06:23:59","sunset":"18:11:47"},{"date":"2026-10-15","sunrise":"06:24:10","sunset":"18:11:08"},{"date":"2026-10-16","sunrise":"06:24:22","sunset":"18:10:29"},{"date":"2026-10-17","sunrise":"06:24:35","sunset":"18:09:51"},{"date":"2026-10-18","sunrise":"06:24:48","sunset":"18:09:14"},{"date":"2026-10-19","sunrise":"06:25:02","sunset":"18:08:37"},{"date":"2026-10-20","sunrise":"06:25:16","sunset":"18:08:02"},{"date":"2026-10-21","sunrise":"06:25:30","sunset":"18:07:27"},{"date":"2026-10-22","sunrise":"06:25:46","sunset":"18:06:52"},{"date":"2026-10-23","sunrise":"06:26:01","sunset":"18:06:19"},{"date":"2026-10-24","sunrise":"06:26:18","sunset":"18:05:46"},{"date":"2026-10-25","sunrise":"06:26:34","sunset":"18:05:15"},{"date":"2026-10-26","sunrise":"06:26:52","sunset":"18:04:44"},{"date":"2026-10-27","sunrise":"06:27:10","sunset":"18:04:14"},{"date":"2026-10-28","sunrise":"06:27:28","sunset":"18:03:45"},{"date":"2026-10-29","sunrise":"06:27:47","sunset":"18:03:17"},{"date":"2026-10-30","sunrise":"06:28:07","sunset":"18:02:50"},{"date":"2026-10-31","sunrise":"06:28:27","sunset":"18:02:24"},{"date":"2026-11-01","sunrise":"06:28:48","sunset":"18:01:59"},{"date":"2026-11-02","sunrise":"06:29:10","sunset":"18:01:36"},{"date":"2026-11-03","sunrise":"06:29:32","sunset":"18:01:13"},{"date":"2026-11-04","sunrise":"06:29:54","sunset":"18:00:51"},{"date":"2026-11-05","sunrise":"06:30:18","sunset":"18:00:30"},{"date":"2026-11-06","sunrise":"06:30:41","sunset":"18:00:10"},{"date":"2026-11-07","sunrise":"06:31:06","sunset":"17:59:52"},{"date":"2026-11-08","sunrise":"06:31:31","sunset":"17:59:35"},{"date":"2026-11-09","sunrise":"06:31:57","sunset":"17:59:18"},{"date":"2026-11-10","sunrise":"06:32:23","sunset":"17:59:03"},{"date":"2026-11-11","sunrise":"06:32:49","sunset":"17:58:49"},{"date":"2026-11-12","sunrise":"06:33:17","sunset":"17:58:36"},{"date":"2026-11-13","sunrise":"06:33:45","sunset":"17:58:25"},{"date":"2026-11-14","sunrise":"06:34:13","sunset":"17:58:14"},{"date":"2026-11-15","sunrise":"06:34:42","sunset":"17:58:05"},{"date":"2026-11-16","sunrise":"06:35:11","sunset":"17:57:57"},{"date":"2026-11-17","sunrise":"06:35:41","sunset":"17:57:51"},{"date":"2026-11-18","sunrise":"06:36:11","sunset":"17:57:45"},{"date":"2026-11-19","sunrise":"06:36:42","sunset":"17:57:41"},{"date":"2026-11-20","sunrise":"06:37:14","sunset":"17:57:37"},{"date":"2026-11-21","sunrise":"06:37:45","sunset":"17:57:36"},{"date":"2026-11-22","sunrise":"06:38:17","sunset":"17:57:35"},{"date":"2026-11-23","sunrise":"06:38:50","sunset":"17:57:35"},{"date":"2026-11-24","sunrise":"06:39:22","sunset":"17:57:37"},{"date":"2026-11-25","sunrise":"06:39:55","sunset":"17:57:40"},{"date":"2026-11-26","sunrise":"06:40:29","sunset":"17:57:44"},{"date":"2026-11-27","sunrise":"06:41:03","sunset":"17:57:50"},{"date":"2026-11-28","sunrise":"06:41:36","sunset":"17:57:56"},{"date":"2026-11-29","sunrise":"06:42:11","sunset":"17:58:04"},{"date":"2026-11-30","sunrise":"06:42:45","sunset":"17:58:13"},{"date":"2026-12-01","sunrise":"06:43:19","sunset":"17:58:23"},{"date":"2026-12-02","sunrise":"06:43:54","sunset":"17:58:34"},{"date":"2026-12-03","sunrise":"06:44:29","sunset":"17:58:46"},{"date":"2026-12-04","sunrise":"06:45:03","sunset":"17:59:00"},{"date":"2026-12-05","sunrise":"06:45:38","sunset":"17:59:14"},{"date":"2026-12-06","sunrise":"06:46:13","sunset":"17:59:30"},{"date":"2026-12-07","sunrise":"06:46:48","sunset":"17:59:47"},{"date":"2026-12-08","sunrise":"06:47:22","sunset":"18:00:05"},{"date":"2026-12-09","sunrise":"06:47:57","sunset":"18:00:23"},{"date":"2026-12-10","sunrise":"06:48:31","sunset":"18:00:43"},{"date":"2026-12-11","sunrise":"06:49:06","sunset":"18:01:04"},{"date":"2026-12-12","sunrise":"06:49:40","sunset":"18:01:26"},{"date":"2026-12-13","sunrise":"06:50:13","sunset":"18:01:49"},{"date":"2026-12-14","sunrise":"06:50:47","sunset":"18:02:12"},{"date":"2026-12-15","sunrise":"06:51:20","sunset":"18:02:37"},{"date":"2026-12-16","sunrise":"06:51:53","sunset":"18:03:02"},{"date":"2026-12-17","sunrise":"06:52:25","sunset":"18:03:28"},{"date":"2026-12-18","sunrise":"06:52:57","sunset":"18:03:55"},{"date":"2026-12-19","sunrise":"06:53:29","sunset":"18:04:23"},{"date":"2026-12-20","sunrise":"06:54:00","sunset":"18:04:51"},{"date":"2026-12-21","sunrise":"06:54:30","sunset":"18:05:21"},{"date":"2026-12-22","sunrise":"06:55:00","sunset":"18:05:50"},{"date":"2026-12-23","sunrise":"06:55:30","sunset":"18:06:21"},{"date":"2026-12-24","sunrise":"06:55:58","sunset":"18:06:52"},{"date":"2026-12-25","sunrise":"06:56:26","sunset":"18:07:24"},{"date":"2026-12-26","sunrise":"06:56:54","sunset":"18:07:56"},{"date":"2026-12-27","sunrise":"06:57:20","sunset":"18:08:29"},{"date":"2026-12-28","sunrise":"06:57:46","sunset":"18:09:02"},{"date":"2026-12-29","sunrise":"06:58:11","sunset":"18:09:35"},{"date":"2026-12-30","sunrise":"06:58:35","sunset":"18:10:09"},{"date":"2026-12-31","sunrise":"06:58:59","sunset":"18:10:44"}];
+const formatter = new Intl.DateTimeFormat("en-IN", {
+  timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
+});
+const dateFormatter = new Intl.DateTimeFormat("en-IN", {
+  timeZone: "Asia/Kolkata", weekday: "long", day: "numeric", month: "long", year: "numeric"
+});
+let alarmsEnabled = false;
+let audioContext = null;
+const firedAlarms = new Set();
+
+function beep(frequency, startDelay) {
+  const start = audioContext.currentTime + startDelay;
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  oscillator.type = "sine";
+  oscillator.frequency.value = frequency;
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(0.22, start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  oscillator.start(start);
+  oscillator.stop(start + 0.3);
+}
+
+function ringAlarm(label, alarmKey) {
+  if (!alarmsEnabled || firedAlarms.has(alarmKey)) return;
+  firedAlarms.add(alarmKey);
+  beep(880, 0);
+  beep(660, 0.38);
+  beep(880, 0.76);
+  document.getElementById("alarm-status").textContent = `Alarm: ${label}`;
+}
+
+function checkAlarms(now, localDate, entry) {
+  if (!alarmsEnabled || !entry) return;
+  for (const event of [
+    { name: "sunrise", time: entry.sunrise, title: "Sunrise" },
+    { name: "sunset", time: entry.sunset, title: "Sunset" }
+  ]) {
+    const eventTime = new Date(`${localDate}T${event.time}+05:30`);
+    const alarmTimes = [
+      { at: eventTime.getTime() - 10 * 60 * 1000, label: `${event.title} in 10 minutes` },
+      { at: eventTime.getTime(), label: event.title }
+    ];
+    for (const alarm of alarmTimes) {
+      const key = `${localDate}-${event.name}-${alarm.at}`;
+      if (now.getTime() >= alarm.at && now.getTime() < alarm.at + 1500) {
+        ringAlarm(alarm.label, key);
+      }
+    }
+  }
+}
+
+function nextEventCountdown(now, localDate, eventTime) {
+  if (!eventTime) return "No 2026 data";
+  const target = new Date(`${localDate}T${eventTime}+05:30`);
+  if (now >= target) target.setTime(target.getTime() + 86400000);
+  const totalSeconds = Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const time = [hours, minutes, seconds].map(value => String(value).padStart(2, "0")).join(":");
+  return days ? `${days}d ${time} until next` : `${time} until next`;
+}
+
+document.getElementById("alarm-toggle").addEventListener("click", async () => {
+  if (alarmsEnabled) {
+    alarmsEnabled = false;
+    document.getElementById("alarm-toggle").textContent = "Enable sound alarms";
+    document.getElementById("alarm-status").textContent = "Sound alarms are off.";
+    return;
+  }
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) {
+    document.getElementById("alarm-status").textContent = "This browser does not support sound alarms.";
+    return;
+  }
+  audioContext = audioContext || new AudioContextClass();
+  if (audioContext.state === "suspended") await audioContext.resume();
+  alarmsEnabled = true;
+  beep(660, 0);
+  document.getElementById("alarm-toggle").textContent = "Turn sound alarms off";
+  document.getElementById("alarm-status").textContent = "Sound alarms on: 10 minutes before sunrise and sunset, and at both events.";
+});
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent = formatter.format(now);
+  document.getElementById("today").textContent = dateFormatter.format(now);
+  const localDate = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(now);
+  const entry = sunTimes.find(item => item.date === localDate);
+  checkAlarms(now, localDate, entry);
+  document.getElementById("sunrise").textContent = entry ? entry.sunrise : "—";
+  document.getElementById("sunset").textContent = entry ? entry.sunset : "—";
+  document.getElementById("sunrise-countdown").textContent = nextEventCountdown(now, localDate, entry && entry.sunrise);
+  document.getElementById("sunset-countdown").textContent = nextEventCountdown(now, localDate, entry && entry.sunset);
+  document.getElementById("note").textContent = entry
+    ? "15.86° N, 74.51° E · 2026 almanac"
+    : "Sunrise and sunset data is available for 2026 only · 15.86° N, 74.51° E";
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>

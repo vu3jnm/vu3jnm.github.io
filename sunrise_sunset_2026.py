@@ -205,7 +205,7 @@ def main():
         description="Create 2026 sunrise/sunset data and a live local digital clock."
     )
     parser.add_argument("--output", default="sunrise_sunset_2026.csv", help="CSV output path")
-    parser.add_argument("--clock", default="sunrise_sunset_clock.html", help="Clock webpage path")
+    parser.add_argument("--clock", default="clock.html", help="Clock webpage path")
     args = parser.parse_args()
 
     rows = calculate_days()
