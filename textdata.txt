@@ -1,0 +1,1 @@
+A model this small learns spelling, punctuation, formatting and local word patterns, but it won't produce coherent long-range meaning. If you'd rather have a word-level model, an n-gram model (no PyTorch needed), or fine-tuning a pretrained model such as GPT-2, I can adapt the script.
