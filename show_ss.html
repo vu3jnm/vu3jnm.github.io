@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunrise & Sunset Calculator</title>
+<style>
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101923; color: #f4f6f8; }
+* { box-sizing: border-box; }
+body { min-height: 100vh; margin: 0; padding: 24px; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 0%, #26394a, #101923 65%); }
+main { width: min(100%, 720px); text-align: center; }
+.eyebrow, .label { color: #a8bdca; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
+#clock { margin: 14px 0 4px; font-size: clamp(3.3rem, 14vw, 7rem); line-height: 1; font-variant-numeric: tabular-nums; }
+#today, #zone, .help { color: #c2d0d8; }
+.times { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 32px 0; }
+.event { padding: 20px 8px; border-top: 1px solid #526675; }
+.value { margin-top: 8px; font-size: clamp(1.6rem, 7vw, 2.5rem); font-variant-numeric: tabular-nums; }
+.countdown { margin-top: 6px; color: #c2d0d8; font-variant-numeric: tabular-nums; }
+.verses { margin-top: 16px; line-height: 1.8; font-size: .98rem; }
+.read-button { width: auto; margin-top: 12px; padding: 8px 14px; font-size: .9rem; }
+.controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; text-align: left; }
+.location-tools { margin-top: 12px; text-align: center; }
+.location-tools button { max-width: 260px; }
+#location-status { min-height: 1.5em; margin-top: 8px; color: #a8bdca; font-size: .9rem; }
+label { color: #c2d0d8; font-size: .9rem; }
+input, button { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #526675; border-radius: 8px; background: #172430; color: #f4f6f8; font: inherit; }
+button { cursor: pointer; background: #26394a; }
+button:hover { background: #344c60; }
+.alarm { margin-top: 18px; }
+#status { min-height: 1.5em; margin-top: 9px; color: #a8bdca; font-size: .9rem; }
+.help { margin-top: 22px; font-size: .85rem; }
+@media (max-width: 520px) { .controls { grid-template-columns: 1fr; gap: 8px; } .times { gap: 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Browser local time</div>
+  <div id="clock" role="timer" aria-live="off">--:--:--</div>
+  <div id="today">Loading date…</div>
+  <div id="zone"></div>
+  <section class="times" aria-label="Sun times">
+    <div class="event"><div class="label">Sunrise</div><div class="value" id="sunrise">—</div><div class="countdown" id="sunrise-countdown">—</div><div class="verses" lang="sa" id="sunrise-verses">सूर्याय स्वाहा| सूर्याय इदम् न मम ||<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम ||</div><button class="read-button" type="button" data-read="sunrise-verses">Read aloud</button></div>
+    <div class="event"><div class="label">Sunset</div><div class="value" id="sunset">—</div><div class="countdown" id="sunset-countdown">—</div><div class="verses" lang="sa" id="sunset-verses">अग्नये स्वाहा | अग्नये इदम् न मम ||<br>प्रजापतये स्वाहा| प्रजापतये इदम् न मम ||</div><button class="read-button" type="button" data-read="sunset-verses">Read aloud</button></div>
+  </section>
+  <section class="controls" aria-label="Calculator coordinates">
+    <label>Latitude<input id="latitude" type="number" value="15.86" min="-89.9" max="89.9" step="0.0001"></label>
+    <label>Longitude<input id="longitude" type="number" value="74.51" min="-180" max="180" step="0.0001"></label>
+  </section>
+  <div class="location-tools">
+    <button id="location-button" type="button">Use my current location</button>
+    <div id="location-status" aria-live="polite">Requesting your location…</div>
+  </div>
+  <div class="alarm">
+    <button id="alarm-button" type="button">Turn sound alarms off</button>
+    <div id="status" aria-live="polite">Alarms are on. Click or tap anywhere once to allow browser audio. Keep this page open.</div>
+  </div>
+  <div class="help">Sunrise/sunset use a standard 90.833° solar-horizon calculation. Keep this page open for alarms.</div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+const localDateString = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const rad = degrees => degrees * Math.PI / 180;
+const deg = radians => radians * 180 / Math.PI;
+const normalize = (value, max) => ((value % max) + max) % max;
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Browser local time';
+$('zone').textContent = `Time zone: ${timezone}`;
+
+document.querySelectorAll('[data-read]').forEach(button => {
+  button.addEventListener('click', () => {
+    if (!("speechSynthesis" in window)) {
+      $('status').textContent = 'Speech output is not supported by this browser.';
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const text = $(button.dataset.read).innerText.replace(/\s*\n\s*/g, '. ');
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'sa-IN';
+    const voices = window.speechSynthesis.getVoices();
+    utterance.voice = voices.find(voice => voice.lang.toLowerCase().startsWith('sa'))
+      || voices.find(voice => voice.lang.toLowerCase().startsWith('hi'))
+      || null;
+    utterance.onstart = () => $('status').textContent = 'Reading Sanskrit aloud…';
+    utterance.onend = () => $('status').textContent = 'Finished reading.';
+    utterance.onerror = () => $('status').textContent = 'Could not read aloud. Check that your browser has a suitable voice installed.';
+    window.speechSynthesis.speak(utterance);
+  });
+});
+
+function solarEvent(year, month, day, latitude, longitude, isSunrise) {
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const n = Math.floor((date - Date.UTC(year, 0, 0)) / 86400000);
+  const longitudeHour = longitude / 15;
+  const t = n + ((isSunrise ? 6 : 18) - longitudeHour) / 24;
+  const meanAnomaly = 0.9856 * t - 3.289;
+  const trueLongitude = normalize(meanAnomaly + 1.916 * Math.sin(rad(meanAnomaly)) + 0.020 * Math.sin(2 * rad(meanAnomaly)) + 282.634, 360);
+  let rightAscension = normalize(deg(Math.atan(0.91764 * Math.tan(rad(trueLongitude)))), 360);
+  rightAscension += Math.floor(trueLongitude / 90) * 90 - Math.floor(rightAscension / 90) * 90;
+  rightAscension /= 15;
+  const sinDeclination = 0.39782 * Math.sin(rad(trueLongitude));
+  const cosDeclination = Math.cos(Math.asin(sinDeclination));
+  const cosHourAngle = (Math.cos(rad(90.833)) - sinDeclination * Math.sin(rad(latitude))) / (cosDeclination * Math.cos(rad(latitude)));
+  if (cosHourAngle > 1 || cosHourAngle < -1) return null;
+  const hourAngle = (isSunrise ? 360 - deg(Math.acos(cosHourAngle)) : deg(Math.acos(cosHourAngle))) / 15;
+  const localMeanTime = hourAngle + rightAscension - 0.06571 * t - 6.622;
+  const utcHour = localMeanTime - longitudeHour;
+  return new Date(Date.UTC(year, month - 1, day) + utcHour * 3600000);
+}
+
+function formatTime(date) {
+  return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(date);
+}
+function countdown(now, target, nextTarget) {
+  if (!target) return 'Unavailable for this location/date';
+  if (target <= now) target = nextTarget;
+  if (!target) return 'Unavailable for next date';
+  const secondsLeft = Math.floor((target - now) / 1000);
+  const days = Math.floor(secondsLeft / 86400);
+  const h = Math.floor(secondsLeft % 86400 / 3600);
+  const m = Math.floor(secondsLeft % 3600 / 60);
+  const s = secondsLeft % 60;
+  return `${days ? `${days}d ` : ''}${pad(h)}:${pad(m)}:${pad(s)} until next`;
+}
+
+let enabled = true;
+let audio = null;
+const fired = new Set();
+const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+if (AudioContextClass) audio = new AudioContextClass();
+
+async function unlockAudio() {
+  if (!audio || audio.state !== 'suspended') return;
+  try {
+    await audio.resume();
+    if (enabled) $('status').textContent = 'Sound alarms are on. Keep this page open.';
+  } catch (_) {
+    $('status').textContent = 'Alarms are on, but browser audio could not be enabled.';
+  }
+}
+document.addEventListener('pointerdown', unlockAudio, { once: true });
+document.addEventListener('keydown', unlockAudio, { once: true });
+
+function beep(hz, delay) {
+  if (!audio || audio.state !== 'running') return;
+  const start = audio.currentTime + delay;
+  const oscillator = audio.createOscillator();
+  const gain = audio.createGain();
+  oscillator.frequency.value = hz;
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(0.2, start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
+  oscillator.connect(gain); gain.connect(audio.destination);
+  oscillator.start(start); oscillator.stop(start + 0.3);
+}
+function ring(label, key) {
+  if (!enabled || fired.has(key)) return;
+  fired.add(key);
+  beep(880, 0); beep(660, 0.38); beep(880, 0.76);
+  $('status').textContent = `Alarm: ${label}`;
+}
+$('alarm-button').addEventListener('click', async () => {
+  if (enabled) {
+    enabled = false;
+    $('alarm-button').textContent = 'Turn sound alarms on';
+    $('status').textContent = 'Sound alarms are off.';
+    return;
+  }
+  if (!AudioContextClass) { $('status').textContent = 'This browser does not support sound alarms.'; return; }
+  audio = audio || new AudioContextClass();
+  if (audio.state === 'suspended') await audio.resume();
+  enabled = true; beep(660, 0);
+  $('alarm-button').textContent = 'Turn sound alarms off';
+  $('status').textContent = 'Sound alarms are on. Keep this page open.';
+});
+
+function update() {
+  const now = new Date();
+  $('clock').textContent = formatTime(now);
+  $('today').textContent = new Intl.DateTimeFormat(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(now);
+  const year = now.getFullYear(), month = now.getMonth() + 1, day = now.getDate();
+  const lat = Number($('latitude').value), lon = Number($('longitude').value);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) >= 90 || Math.abs(lon) > 180) return;
+  const sunrise = solarEvent(year, month, day, lat, lon, true);
+  const sunset = solarEvent(year, month, day, lat, lon, false);
+  const tomorrow = new Date(year, month - 1, day + 1);
+  const nextSunrise = solarEvent(tomorrow.getFullYear(), tomorrow.getMonth() + 1, tomorrow.getDate(), lat, lon, true);
+  const nextSunset = solarEvent(tomorrow.getFullYear(), tomorrow.getMonth() + 1, tomorrow.getDate(), lat, lon, false);
+  $('sunrise').textContent = sunrise ? formatTime(sunrise) : 'No sunrise';
+  $('sunset').textContent = sunset ? formatTime(sunset) : 'No sunset';
+  $('sunrise-countdown').textContent = countdown(now, sunrise, nextSunrise);
+  $('sunset-countdown').textContent = countdown(now, sunset, nextSunset);
+  if (enabled) {
+    for (const [name, event, title] of [['sunrise', sunrise, 'Sunrise'], ['sunset', sunset, 'Sunset']]) {
+      if (!event) continue;
+      for (const [at, label] of [[event.getTime() - 600000, `${title} in 10 minutes`], [event.getTime(), title]]) {
+        const key = `${localDateString(now)}-${name}-${at}`;
+        if (now.getTime() >= at && now.getTime() < at + 1500) ring(label, key);
+      }
+    }
+  }
+}
+$('latitude').addEventListener('input', update);
+$('longitude').addEventListener('input', update);
+
+function locateUser() {
+  if (!('geolocation' in navigator)) {
+    $('location-status').textContent = 'Location is not supported by this browser. Enter coordinates manually.';
+    return;
+  }
+  $('location-status').textContent = 'Finding your location with high accuracy…';
+  navigator.geolocation.getCurrentPosition(position => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    $('latitude').value = latitude.toFixed(6);
+    $('longitude').value = longitude.toFixed(6);
+    $('location-status').textContent = `Location filled in (estimated accuracy ±${Math.round(position.coords.accuracy)} m).`;
+    update();
+  }, error => {
+    const messages = {
+      1: 'Location permission was denied. Allow location access or enter coordinates manually.',
+      2: 'Your location could not be determined. Check device location services or enter coordinates manually.',
+      3: 'Location lookup timed out. Try again or enter coordinates manually.'
+    };
+    $('location-status').textContent = messages[error.code] || 'Could not get your location. Enter coordinates manually.';
+  }, { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 });
+}
+$('location-button').addEventListener('click', locateUser);
+update();
+locateUser();
+setInterval(update, 1000);
+</script>
+</body>
+</html>
